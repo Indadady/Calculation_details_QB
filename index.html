@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 제출용 가격 산출 내역서 - TOURMAKER</title>
+    <title>큐비글로벌 가격 산출 내역서</title>
 
     <!-- 카카오톡 공유 썸네일 (Open Graph) 설정 -->
-    <meta property="og:title" content="투어메이커 가격 산출 내역서">
-    <meta property="og:description" content="고객 제출용 공식 행사비 산출 내역서">
-    <meta property="og:image" content="https://blogger.googleusercontent.com/img/a/AVvXsEhPxG_ONo2BdFAGDNnn-pHIGJTrAq374YbqgwTTlyIZTP22kOWTDD_AyjKDNFPhsHg5t1Iq6zV0dL_NZIj4o97Kd0eWJYCv-NHhtIqme-Mp3htGhAdkqVv5NRU3Jc9TbdbvvVKrPslObA1oNABpgl12QtGwirC2QM5lcPCVoWm8pIbeKuZBbeDHAvpbKEQ">
+    <meta property="og:title" content="큐비글로벌 가격 산출 내역서">
+    <meta property="og:description" content="고객 제출용 공식 행사비 산출 내역서 (해외 전용)">
+    <meta property="og:image" content="https://blogger.googleusercontent.com/img/a/AVvXsEjJbyY6LNfZqcQb4f7y_QAcVUPVZQlDH8f6vnLqfkcYkQSqdPP6OcEb7rxWAIjoBiqwtrmikAPdq8sCvJnv5tYcbRQ0rt9kFq6xUUdsEI_rEFzkQ_tmkkUdnybdjmskCdfCDZ8R7mLeSUUpWUxxuklWwFF1M33yrqyPMwF8Fj0igijILrgfNk5czEHzZw0">
     <meta property="og:type" content="website">
 
     <!-- 구글 애널리틱스 (GA4) 탑재 -->
@@ -93,7 +93,7 @@
     <div class="bg-slate-900 text-white p-4 flex justify-between items-center no-print shadow-md z-10">
         <div class="flex items-center gap-3">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-8 filter brightness-0 invert">
-            <h1 class="text-xl font-bold tracking-tight">고객 제출용 가격 산출 내역서</h1>
+            <h1 class="text-xl font-bold tracking-tight">큐비글로벌 전용 가격 산출 내역서</h1>
         </div>
         <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-md font-semibold shadow transition">
             PDF 내보내기 / 인쇄
@@ -117,12 +117,13 @@
                         <div class="col-span-2"><label class="block text-gray-600 mb-1">여행인원 표기</label><input type="text" id="inp-paxStr" class="w-full border rounded p-1.5" value="38명기준(학생 33+ 교사5)"></div>
                         <div><label class="block text-gray-600 mb-1">발송일자</label><input type="text" id="inp-issueDate" class="w-full border rounded p-1.5" value="2026.03.10"></div>
                         <div>
-                            <label class="block text-gray-600 mb-1">통화</label>
+                            <label class="block text-gray-600 mb-1">통화/지역 선택</label>
                             <select id="inp-currency" class="w-full border rounded p-1.5 font-bold text-blue-800">
-                                <option value="JPY">JPY (엔화)</option>
-                                <option value="USD">USD (달러)</option>
-                                <option value="CNY">CNY (위안화)</option>
-                                <option value="KRW">KRW (국내/제주)</option>
+                                <option value="JPY">JPY (해외/엔화)</option>
+                                <option value="USD">USD (해외/달러)</option>
+                                <option value="CNY">CNY (해외/위안화)</option>
+                                <option value="AUD">AUD (해외/호주달러)</option>
+                                <option value="NZD">NZD (해외/뉴질랜드달러)</option>
                             </select>
                         </div>
                         <div class="col-span-2 flex items-center gap-2" id="wrap-exRate">
@@ -133,9 +134,9 @@
                     </div>
                 </div>
 
-                <!-- 2. 항공료 -->
+                <!-- 2. 항공료 영역 -->
                 <div class="space-y-3">
-                    <h3 class="font-bold text-slate-800 border-l-4 border-slate-800 pl-2">2. 항공료 영역 (원화 직접 입력)</h3>
+                    <h3 id="title-flight-area" class="font-bold text-slate-800 border-l-4 border-slate-800 pl-2">2. 항공료 영역 (원화 직접 입력)</h3>
                     <div class="bg-gray-50 p-2 rounded border grid grid-cols-12 gap-2 items-center">
                         <div class="col-span-3"><input type="text" id="inp-f1-name" class="w-full border rounded p-1" value="에어로케이" placeholder="항목"></div>
                         <div class="col-span-4"><input type="text" id="inp-f1-desc" class="w-full border rounded p-1" value="인천-오사카-인천" placeholder="내용"></div>
@@ -152,13 +153,13 @@
                     </div>
                 </div>
 
-                <!-- 3. 현지 발생비용 -->
+                <!-- 3. 현지 발생비용 (20개 슬롯 확장) -->
                 <div class="space-y-3">
                     <h3 id="title-local-expense" class="font-bold text-green-800 border-l-4 border-green-800 pl-2 flex justify-between items-center">
                         3. 해외현지 발생비용 (외화 입력)
                         <span class="text-xs font-normal text-gray-500">*원화 자동 환산</span>
                     </h3>
-                    <p class="text-xs text-gray-500 mb-1">연속된 항목명(예: 호텔, 식비)은 출력물에서 자동으로 병합됩니다.</p>
+                    <p class="text-xs text-gray-500 mb-1">연속된 항목명+내용이 같으면 출력물에서 셀이 자동 병합됩니다.</p>
                     <div id="local-inputs-container" class="space-y-2"></div>
                 </div>
 
@@ -226,6 +227,7 @@
                             </table>
                         </div>
                         <div class="w-[40%] flex justify-end items-start pt-1">
+                            <!-- 큐비글로벌 메인 로고로 변경 -->
                             <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjPMO83G1xHJIu1jKvn1GjQn_C3z42tM-LYvYPKcGIaYkarv47vw5TlYsJFjZxRLVm4e0yQutvIHXQ_VBUHdlu2p25QP7z1NAK2XsEUNUpxycDMpLzi7TJ390gXDpD5orf1OBAXwbwnPrasas06glRIv9rpqwN1YEQvy2fPbKRU4Ogpbo8SyH7NEnt-1FY=w320-h101" alt="QB GLOBAL" class="h-12 object-contain">
                         </div>
                     </div>
@@ -242,13 +244,13 @@
                 <div class="flex-grow flex flex-col mb-2">
                     <table class="w-full print-border text-xs flex-grow" id="main-table" style="height: 100%;">
                         <thead id="main-thead">
-                            <!-- JS를 통해 통화(해외/국내) 설정에 따라 동적 생성됨 -->
+                            <!-- JS를 통해 동적 생성됨 -->
                         </thead>
                         <tbody id="tbody-flight"></tbody>
                         <tbody id="tbody-local"></tbody>
                         <tbody id="tbody-domestic"></tbody>
                         <tbody id="tbody-total">
-                            <!-- JS를 통해 동적 생성됨 (Colspan 대응) -->
+                            <!-- JS를 통해 동적 생성됨 -->
                         </tbody>
                     </table>
                 </div>
@@ -278,7 +280,7 @@
     </div>
 
     <script>
-        // PDF에 맞춘 초기 샘플 데이터
+        // PDF에 맞춘 초기 샘플 데이터 (입력 슬롯 20개로 대폭 확장)
         const initialLocals = [
             { name: "호텔", desc: "(2인실) 3박요금", qty: 20, fgn: 65000, note: "조식포함" },
             { name: "호텔", desc: "(1인실) 3박요금", qty: 0, fgn: 52000, note: "" },
@@ -293,19 +295,19 @@
             { name: "관광지입장료", desc: "청수사", qty: 38, fgn: 600, note: "" },
             { name: "관광지입장료", desc: "하루카스전망대", qty: 38, fgn: 2200, note: "" },
             { name: "관광지입장료", desc: "동대사", qty: 38, fgn: 800, note: "" },
-            { name: "가이드비용", desc: "전일정", qty: 1, fgn: 240000, note: "노쇼핑/*인천공항 미팅" },
-            { name: "", desc: "", qty: 0, fgn: 0, note: "" }
+            { name: "가이드비용", desc: "전일정", qty: 1, fgn: 240000, note: "노쇼핑/*인천공항 미팅" }
         ];
 
+        // 20개 슬롯 자동 세팅
         function buildLocalInputs() {
             const container = document.getElementById('local-inputs-container');
             let html = '';
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<20; i++) {
                 const item = initialLocals[i] || { name:'', desc:'', qty:0, fgn:0, note:'' };
                 html += `
                     <div class="bg-white p-2 rounded border border-gray-200 grid grid-cols-12 gap-1 items-center hover:bg-green-50 transition">
                         <div class="col-span-3"><input type="text" id="inp-l${i}-name" class="w-full border rounded p-1 text-xs" value="${item.name}" placeholder="항목명"></div>
-                        <div class="col-span-3"><input type="text" id="inp-l${i}-desc" class="w-full border rounded p-1 text-xs" value="${item.desc}" placeholder="내용"></div>
+                        <div class="col-span-3"><input type="text" id="inp-l${i}-desc" class="w-full border rounded p-1 text-xs" value="${item.desc}" placeholder="내용 (동일 시 병합)"></div>
                         <div class="col-span-2"><input type="number" id="inp-l${i}-qty" class="w-full border rounded p-1 text-xs text-center" value="${item.qty}" placeholder="수량"></div>
                         <div class="col-span-4"><input type="number" id="inp-l${i}-fgn" class="w-full border rounded p-1 text-xs text-right" value="${item.fgn}" placeholder="단가(외화)"></div>
                         <div class="col-span-12"><input type="text" id="inp-l${i}-note" class="w-full border rounded p-1 text-xs text-gray-500" value="${item.note}" placeholder="비고 (빈칸가능)"></div>
@@ -326,49 +328,32 @@
             const issueDate = document.getElementById('inp-issueDate').value;
             const currency = document.getElementById('inp-currency').value;
             
-            // KRW(국내) 모드 체크
-            const isKRW = currency === 'KRW';
-            
-            // 국내 모드일 경우 환율은 무조건 1로 강제 처리
-            let exRate = isKRW ? 1 : (Number(document.getElementById('inp-exRate').value) || 0);
-
-            // 좌측 입력 패널 UI 동적 변경 (KRW 모드 대응)
-            document.getElementById('title-local-expense').innerHTML = isKRW 
-                ? '3. 제주(현지) 발생비용 (원화 직접 입력)' 
-                : '3. 해외현지 발생비용 (외화 입력) <span class="text-xs font-normal text-gray-500">*원화 자동 환산</span>';
-            
-            for(let i=0; i<15; i++) {
-                const fgnInput = document.getElementById(`inp-l${i}-fgn`);
-                if(fgnInput) fgnInput.placeholder = isKRW ? "단가(₩)" : "단가(외화)";
-            }
+            let exRate = Number(document.getElementById('inp-exRate').value) || 0;
 
             // 출력표 헤더 매핑
             document.getElementById('out-clientName').innerText = clientName;
             document.getElementById('out-docTitle').innerText = docTitle;
             document.getElementById('out-travelDate').innerText = travelDate;
             document.getElementById('out-paxStr').innerText = paxStr;
-            
-            // 환율 표시줄 동적 변경
-            if (isKRW) {
-                document.getElementById('out-issueAndRate').innerText = `${issueDate} / 국내행사 (환율 미적용)`;
-            } else {
-                document.getElementById('out-issueAndRate').innerText = `${issueDate} / ${currency} ${exRate} 기준(송금)`;
-            }
+            document.getElementById('out-issueAndRate').innerText = `${issueDate} / ${currency} ${exRate} 기준(송금)`;
 
-            const currName = currency === 'JPY' ? '엔화' : (currency === 'USD' ? '달러' : (currency === 'KRW' ? '원화' : '위안화'));
-            const currSym = currency === 'USD' ? '$' : (currency === 'KRW' ? '₩' : '¥');
+            const currNames = { 'JPY': '엔화', 'USD': '달러', 'CNY': '위안화', 'AUD': '호주달러', 'NZD': '뉴질랜드달러' };
+            const currSyms = { 'JPY': '¥', 'USD': '$', 'CNY': '¥', 'AUD': 'A$', 'NZD': 'NZ$' };
             
-            // 테이블 Thead 동적 렌더링 (KRW일 경우 외화단가 열 삭제)
+            const currName = currNames[currency] || '외화';
+            const currSym = currSyms[currency] || '$';
+            
+            // 테이블 Thead 동적 렌더링 (해외 전용 고정 포맷)
             const theadHtml = `
                 <tr class="print-bg-header bg-header text-slate-900" style="height: 1%;">
-                    <th class="${isKRW ? 'w-[10%]' : 'w-[10%]'}">구분</th>
-                    <th class="${isKRW ? 'w-[15%]' : 'w-[12%]'}">항목</th>
-                    <th class="${isKRW ? 'w-[25%]' : 'w-[20%]'}">내용</th>
-                    <th class="${isKRW ? 'w-[10%]' : 'w-[10%]'} text-[11px] leading-tight">인원/객실수<br>차량대수</th>
-                    ${!isKRW ? `<th class="w-[11%] print-bg-yellow bg-yellow-100 text-slate-900"><span class="curr-name">${currName}</span> 단가<br><span class="curr-code font-normal text-slate-600">${currency}</span></th>` : ''}
-                    <th class="${isKRW ? 'w-[15%]' : 'w-[12%]'}">원화 단가<br><span class="font-normal">KRW</span></th>
-                    <th class="${isKRW ? 'w-[15%]' : 'w-[13%]'}">총금액<br><span class="font-normal">KRW</span></th>
-                    <th class="${isKRW ? 'w-[10%]' : 'w-[12%]'}">비고</th>
+                    <th class="w-[10%]">구분</th>
+                    <th class="w-[12%]">항목</th>
+                    <th class="w-[20%]">내용</th>
+                    <th class="w-[10%] text-[11px] leading-tight">인원/객실수<br>차량대수</th>
+                    <th class="w-[11%] print-bg-yellow bg-yellow-100 text-slate-900"><span class="curr-name">${currName}</span> 단가<br><span class="curr-code font-normal text-slate-600">${currency}</span></th>
+                    <th class="w-[12%]">원화 단가<br><span class="font-normal">KRW</span></th>
+                    <th class="w-[13%]">총금액<br><span class="font-normal">KRW</span></th>
+                    <th class="w-[12%]">비고</th>
                 </tr>
             `;
             document.getElementById('main-thead').innerHTML = theadHtml;
@@ -393,22 +378,33 @@
             for(let i=0; i<flights.length; i++) {
                 htmlFlight += `<tr>`;
                 if(i === 0) htmlFlight += `<td rowspan="${flights.length}" class="text-center font-bold print-bg-gray bg-gray-50">항공료</td>`;
+                
+                // 항목 (Name) Rowspan
                 if(i === 0 || flights[i].name !== flights[i-1].name) {
                     let rowspan = 1;
                     for(let j = i+1; j < flights.length; j++) { if(flights[j].name === flights[i].name) rowspan++; else break; }
                     htmlFlight += `<td rowspan="${rowspan}" class="text-center bg-white">${flights[i].name}</td>`;
                 }
+
+                // 내용 (Desc) Rowspan - Name과 Desc가 모두 같을 때만 병합
+                if(i === 0 || flights[i].name !== flights[i-1].name || flights[i].desc !== flights[i-1].desc) {
+                    let rowspan = 1;
+                    for(let j = i+1; j < flights.length; j++) { 
+                        if(flights[j].name === flights[i].name && flights[j].desc === flights[i].desc) rowspan++; else break; 
+                    }
+                    htmlFlight += `<td rowspan="${rowspan}">${flights[i].desc.replace(/\n/g, '<br>')}</td>`;
+                }
+
                 htmlFlight += `
-                    <td>${flights[i].desc.replace(/\n/g, '<br>')}</td>
                     <td class="text-center">${fmt(flights[i].qty)}</td>
-                    ${!isKRW ? `<td class="text-right print-bg-gray bg-gray-50"></td>` : ''}
+                    <td class="text-right print-bg-gray bg-gray-50"></td>
                     <td class="text-right">${fmt(flights[i].krw)}</td>
                     <td class="text-right font-semibold">${fmtTotal(flights[i].rowTotal)}</td>
                     <td class="text-center">${flights[i].note}</td>
                 </tr>`;
             }
-            // 항공료 소계
-            const colspanTotal = isKRW ? 5 : 6;
+            
+            const colspanTotal = 6;
             htmlFlight += `
                 <tr class="print-bg-blue bg-blue-50 font-bold border-b-2 border-slate-900" style="height: 1%;">
                     <td colspan="${colspanTotal}" class="text-center py-2">(1) 합계항공</td>
@@ -417,16 +413,15 @@
                 </tr>`;
             document.getElementById('tbody-flight').innerHTML = htmlFlight;
 
-            // 2. 현지경비 (용어: 해외현지 -> 제주/해외현지 발생비용 변경)
-            const localTitleName = isKRW ? '제주(현지)<br>발생비용' : '해외현지<br>발생비용';
+            // 2. 해외현지 발생비용
             const locals = [];
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<20; i++) {
                 const name = document.getElementById(`inp-l${i}-name`).value;
                 if(name.trim() !== '') {
                     const desc = document.getElementById(`inp-l${i}-desc`).value;
                     const qty = Number(document.getElementById(`inp-l${i}-qty`).value) || 0;
                     const fgn = Number(document.getElementById(`inp-l${i}-fgn`).value) || 0;
-                    const krw = isKRW ? fgn : Math.round(fgn * exRate);
+                    const krw = Math.round(fgn * exRate);
                     totalLocal += (krw * qty);
                     locals.push({ name, desc, qty, fgn, krw, rowTotal: krw * qty, note: document.getElementById(`inp-l${i}-note`).value });
                 }
@@ -435,16 +430,27 @@
             let htmlLocal = '';
             for(let i=0; i<locals.length; i++) {
                 htmlLocal += `<tr>`;
-                if(i === 0) htmlLocal += `<td rowspan="${locals.length}" class="text-center font-bold print-bg-gray bg-gray-50 leading-loose">${localTitleName}</td>`;
+                if(i === 0) htmlLocal += `<td rowspan="${locals.length}" class="text-center font-bold print-bg-gray bg-gray-50 leading-loose">해외현지<br>발생비용</td>`;
+                
+                // 항목 (Name) Rowspan
                 if(i === 0 || locals[i].name !== locals[i-1].name) {
                     let rowspan = 1;
                     for(let j = i+1; j < locals.length; j++) { if(locals[j].name === locals[i].name) rowspan++; else break; }
                     htmlLocal += `<td rowspan="${rowspan}" class="text-center bg-white">${locals[i].name}</td>`;
                 }
+
+                // 내용 (Desc) Rowspan - Name과 Desc가 모두 같을 때 병합 (학생/교사 단가 구분용)
+                if(i === 0 || locals[i].name !== locals[i-1].name || locals[i].desc !== locals[i-1].desc) {
+                    let rowspan = 1;
+                    for(let j = i+1; j < locals.length; j++) { 
+                        if(locals[j].name === locals[i].name && locals[j].desc === locals[i].desc) rowspan++; else break; 
+                    }
+                    htmlLocal += `<td rowspan="${rowspan}">${locals[i].desc}</td>`;
+                }
+
                 htmlLocal += `
-                    <td>${locals[i].desc}</td>
                     <td class="text-center">${fmt(locals[i].qty)}</td>
-                    ${!isKRW ? `<td class="text-right print-bg-yellow-light bg-yellow-50"><span class="text-[10px] text-gray-500 float-left">${currSym}</span>${fmt(locals[i].fgn)}</td>` : ''}
+                    <td class="text-right print-bg-yellow-light bg-yellow-50"><span class="text-[10px] text-gray-500 float-left">${currSym}</span>${fmt(locals[i].fgn)}</td>
                     <td class="text-right">${fmt(locals[i].krw)}</td>
                     <td class="text-right font-semibold">${fmtTotal(locals[i].rowTotal)}</td>
                     <td class="text-center">${locals[i].note}</td>
@@ -452,7 +458,7 @@
             }
             htmlLocal += `
                 <tr class="print-bg-blue bg-blue-50 font-bold border-b-2 border-slate-900" style="height: 1%;">
-                    <td colspan="${colspanTotal}" class="text-center py-2">(2) 합계 - ${isKRW ? '제주(현지)' : '해외현지'} 발생 비용</td>
+                    <td colspan="${colspanTotal}" class="text-center py-2">(2) 합계 - 해외현지 발생 비용</td>
                     <td class="text-right text-blue-800">${fmtTotal(totalLocal)}</td>
                     <td></td>
                 </tr>`;
@@ -475,15 +481,24 @@
             for(let i=0; i<domestics.length; i++) {
                 htmlDom += `<tr>`;
                 if(i === 0) htmlDom += `<td rowspan="${domestics.length}" class="text-center font-bold print-bg-gray bg-gray-50">국내 비용</td>`;
+                
                 if(i === 0 || domestics[i].name !== domestics[i-1].name) {
                     let rowspan = 1;
                     for(let j = i+1; j < domestics.length; j++) { if(domestics[j].name === domestics[i].name) rowspan++; else break; }
                     htmlDom += `<td rowspan="${rowspan}" class="text-center bg-white">${domestics[i].name}</td>`;
                 }
+
+                if(i === 0 || domestics[i].name !== domestics[i-1].name || domestics[i].desc !== domestics[i-1].desc) {
+                    let rowspan = 1;
+                    for(let j = i+1; j < domestics.length; j++) { 
+                        if(domestics[j].name === domestics[i].name && domestics[j].desc === domestics[i].desc) rowspan++; else break; 
+                    }
+                    htmlDom += `<td rowspan="${rowspan}">${domestics[i].desc}</td>`;
+                }
+
                 htmlDom += `
-                    <td>${domestics[i].desc}</td>
                     <td class="text-center">${fmt(domestics[i].qty)}</td>
-                    ${!isKRW ? `<td class="text-right print-bg-gray bg-gray-50"></td>` : ''}
+                    <td class="text-right print-bg-gray bg-gray-50"></td>
                     <td class="text-right">${fmt(domestics[i].krw)}</td>
                     <td class="text-right font-semibold">${fmtTotal(domestics[i].rowTotal)}</td>
                     <td class="text-center">${domestics[i].note}</td>
@@ -497,7 +512,7 @@
                 </tr>`;
             document.getElementById('tbody-domestic').innerHTML = htmlDom;
 
-            // 4. 총합계 렌더링 (Colspan 동적 대응)
+            // 4. 총합계
             const grandTotal = totalFlight + totalLocal + totalDomestic;
             const noFlightTotal = totalLocal + totalDomestic;
 
@@ -523,19 +538,14 @@
             // 실시간 이벤트 감지
             document.querySelector('.w-full.lg\\:w-\\[480px\\]').addEventListener('input', (e) => {
                 const curr = document.getElementById('inp-currency').value;
-                const rateWrapper = document.getElementById('wrap-exRate');
                 const rateInput = document.getElementById('inp-exRate');
                 
                 if(e.target.id === 'inp-currency') {
-                    if(curr === 'KRW') {
-                        rateWrapper.style.display = 'none'; // 국내 선택시 환율칸 숨김
-                        rateInput.value = 1; 
-                    } else {
-                        rateWrapper.style.display = 'flex'; // 해외 선택시 환율칸 노출
-                        if(curr === 'JPY' && rateInput.value > 100) rateInput.value = 9.5;
-                        else if(curr === 'USD' && rateInput.value < 100) rateInput.value = 1400;
-                        else if(curr === 'CNY' && (rateInput.value < 100 || rateInput.value > 300)) rateInput.value = 195;
-                    }
+                    if(curr === 'JPY' && rateInput.value > 100) rateInput.value = 9.5;
+                    else if(curr === 'USD' && rateInput.value < 100) rateInput.value = 1400;
+                    else if(curr === 'CNY' && (rateInput.value < 100 || rateInput.value > 300)) rateInput.value = 195;
+                    else if(curr === 'AUD' && (rateInput.value < 100 || rateInput.value > 1000)) rateInput.value = 900; // 호주 달러 기본 환율
+                    else if(curr === 'NZD' && (rateInput.value < 100 || rateInput.value > 1000)) rateInput.value = 820; // 뉴질랜드 달러 기본 환율
                 }
                 calculateAndRender();
             });
