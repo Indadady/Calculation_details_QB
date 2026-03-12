@@ -119,16 +119,13 @@
                         <div>
                             <label class="block text-gray-600 mb-1">통화/지역 선택</label>
                             <select id="inp-currency" class="w-full border rounded p-1.5 font-bold text-blue-800">
-                                <option value="JPY">JPY (해외/엔화)</option>
-                                <option value="USD">USD (해외/달러)</option>
-                                <option value="CNY">CNY (해외/위안화)</option>
-                                <option value="AUD">AUD (해외/호주달러)</option>
-                                <option value="NZD">NZD (해외/뉴질랜드달러)</option>
+                                <option value="AUD">AUD (호주달러)</option>
+                                <option value="NZD">NZD (뉴질랜드달러)</option>
                             </select>
                         </div>
                         <div class="col-span-2 flex items-center gap-2" id="wrap-exRate">
                             <label class="text-gray-600 whitespace-nowrap">적용 환율:</label>
-                            <input type="number" step="0.1" id="inp-exRate" class="w-24 border rounded p-1.5 text-right font-bold text-blue-700 bg-blue-50" value="9.5">
+                            <input type="number" step="0.1" id="inp-exRate" class="w-24 border rounded p-1.5 text-right font-bold text-blue-700 bg-blue-50" value="900">
                             <span class="text-gray-500 text-xs">기준(송금)</span>
                         </div>
                     </div>
@@ -280,22 +277,22 @@
     </div>
 
     <script>
-        // PDF에 맞춘 초기 샘플 데이터 (입력 슬롯 20개로 대폭 확장)
+        // PDF에 맞춘 초기 샘플 데이터 (호주/뉴질랜드 물가 및 환경에 맞게 샘플값 조정)
         const initialLocals = [
-            { name: "호텔", desc: "(2인실) 3박요금", qty: 20, fgn: 65000, note: "조식포함" },
-            { name: "호텔", desc: "(1인실) 3박요금", qty: 0, fgn: 52000, note: "" },
-            { name: "차량비", desc: "전용차량", qty: 1, fgn: 950000, note: "통행료+주차비" },
-            { name: "식비", desc: "중식_1일차", qty: 38, fgn: 2000, note: "" },
-            { name: "식비", desc: "중식_2일차", qty: 38, fgn: 2000, note: "" },
-            { name: "식비", desc: "중식_3일차", qty: 38, fgn: 2000, note: "" },
-            { name: "식비", desc: "석식_1일차", qty: 38, fgn: 3000, note: "" },
-            { name: "식비", desc: "석식_2일차", qty: 38, fgn: 3000, note: "" },
-            { name: "식비", desc: "석식_3일차", qty: 38, fgn: 3000, note: "" },
-            { name: "관광지입장료", desc: "롯코산케이블카", qty: 38, fgn: 1300, note: "" },
-            { name: "관광지입장료", desc: "청수사", qty: 38, fgn: 600, note: "" },
-            { name: "관광지입장료", desc: "하루카스전망대", qty: 38, fgn: 2200, note: "" },
-            { name: "관광지입장료", desc: "동대사", qty: 38, fgn: 800, note: "" },
-            { name: "가이드비용", desc: "전일정", qty: 1, fgn: 240000, note: "노쇼핑/*인천공항 미팅" }
+            { name: "호텔", desc: "(2인실) 3박요금", qty: 20, fgn: 150, note: "조식포함" },
+            { name: "호텔", desc: "(1인실) 3박요금", qty: 0, fgn: 120, note: "" },
+            { name: "차량비", desc: "전용차량", qty: 1, fgn: 1200, note: "통행료+주차비" },
+            { name: "식비", desc: "중식_1일차", qty: 38, fgn: 25, note: "" },
+            { name: "식비", desc: "중식_2일차", qty: 38, fgn: 25, note: "" },
+            { name: "식비", desc: "중식_3일차", qty: 38, fgn: 25, note: "" },
+            { name: "식비", desc: "석식_1일차", qty: 38, fgn: 35, note: "" },
+            { name: "식비", desc: "석식_2일차", qty: 38, fgn: 35, note: "" },
+            { name: "식비", desc: "석식_3일차", qty: 38, fgn: 35, note: "" },
+            { name: "관광지입장료", desc: "국립공원", qty: 38, fgn: 15, note: "" },
+            { name: "관광지입장료", desc: "동물원", qty: 38, fgn: 30, note: "" },
+            { name: "관광지입장료", desc: "전망대", qty: 38, fgn: 25, note: "" },
+            { name: "관광지입장료", desc: "크루즈", qty: 38, fgn: 45, note: "" },
+            { name: "가이드비용", desc: "전일정", qty: 1, fgn: 300, note: "노쇼핑/*공항 미팅" }
         ];
 
         // 20개 슬롯 자동 세팅
@@ -337,8 +334,8 @@
             document.getElementById('out-paxStr').innerText = paxStr;
             document.getElementById('out-issueAndRate').innerText = `${issueDate} / ${currency} ${exRate} 기준(송금)`;
 
-            const currNames = { 'JPY': '엔화', 'USD': '달러', 'CNY': '위안화', 'AUD': '호주달러', 'NZD': '뉴질랜드달러' };
-            const currSyms = { 'JPY': '¥', 'USD': '$', 'CNY': '¥', 'AUD': 'A$', 'NZD': 'NZ$' };
+            const currNames = { 'AUD': '호주달러', 'NZD': '뉴질랜드달러' };
+            const currSyms = { 'AUD': 'A$', 'NZD': 'NZ$' };
             
             const currName = currNames[currency] || '외화';
             const currSym = currSyms[currency] || '$';
@@ -541,11 +538,8 @@
                 const rateInput = document.getElementById('inp-exRate');
                 
                 if(e.target.id === 'inp-currency') {
-                    if(curr === 'JPY' && rateInput.value > 100) rateInput.value = 9.5;
-                    else if(curr === 'USD' && rateInput.value < 100) rateInput.value = 1400;
-                    else if(curr === 'CNY' && (rateInput.value < 100 || rateInput.value > 300)) rateInput.value = 195;
-                    else if(curr === 'AUD' && (rateInput.value < 100 || rateInput.value > 1000)) rateInput.value = 900; // 호주 달러 기본 환율
-                    else if(curr === 'NZD' && (rateInput.value < 100 || rateInput.value > 1000)) rateInput.value = 820; // 뉴질랜드 달러 기본 환율
+                    if(curr === 'AUD' && (rateInput.value < 100 || rateInput.value > 1200)) rateInput.value = 900; // 호주 달러 기본 환율
+                    else if(curr === 'NZD' && (rateInput.value < 100 || rateInput.value > 1200)) rateInput.value = 820; // 뉴질랜드 달러 기본 환율
                 }
                 calculateAndRender();
             });
