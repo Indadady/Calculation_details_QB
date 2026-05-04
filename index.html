@@ -328,13 +328,13 @@
                 <div class="flex-grow flex flex-col">
                     <table class="cost-table flex-grow">
                         <colgroup>
-                            <col width="11%"> <!-- 구분 -->
+                            <col width="9%"> <!-- 구분 -->
                             <col width="14%"> <!-- 항목 -->
-                            <col width="22%"> <!-- 내용 -->
-                            <col width="9%">  <!-- 수량 -->
-                            <col width="10%" id="col-fgn"> <!-- 외화단가 -->
+                            <col width="21%"> <!-- 내용 -->
+                            <col width="7%">  <!-- 수량 -->
+                            <col width="13%" id="col-fgn"> <!-- 외화단가 -->
                             <col width="12%"> <!-- 원화단가 -->
-                            <col width="12%"> <!-- 총금액 -->
+                            <col width="14%"> <!-- 총금액 -->
                             <col width="10%"> <!-- 비고 -->
                         </colgroup>
                         <thead>
@@ -467,9 +467,8 @@
                     if(isForeignGrp) {
                         // 외화 단가 입력 (원화는 자동계산이므로 읽기전용 느낌 표기)
                         html += `
-                            <div class="col-span-3 relative">
-                                <span class="absolute left-2 top-2 text-[10px] text-slate-400">${currencySym}</span>
-                                <input type="text" class="input-field !p-1.5 !pl-5 text-[11px] text-right font-black text-green-900 bg-green-50/50 w-full" value="${c.fgn}" oninput="handleNumInput(this, '${type}', ${i}, 'fgn')" placeholder="외화단가">
+                            <div class="col-span-3">
+                                <input type="text" class="input-field !p-1.5 text-[11px] text-right font-black text-emerald-900 bg-emerald-50 border-emerald-300 w-full" value="${c.fgn}" oninput="handleNumInput(this, '${type}', ${i}, 'fgn')" placeholder="외화단가">
                             </div>`;
                     } else {
                         // 원화 단가 직접 입력
@@ -538,7 +537,7 @@
             document.getElementById('out-issue').innerText = `${issueDate} / ${currencyCode} ${exRate} 기준(송금)`;
 
             // 2. 테이블 헤더(외화단가 컬럼) 업데이트
-            document.getElementById('th-fgn-price').innerHTML = `${currencyName} 단가<br><span class="font-normal text-[10px]">${currencyCode}</span>`;
+            document.getElementById('th-fgn-price').innerHTML = `외화단가<br><span class="inline-block bg-emerald-100 text-emerald-800 px-1.5 py-[1px] rounded text-[9.5px] mt-0.5 border border-emerald-200">${currencyCode}</span>`;
 
             // 3. 안내문 업데이트
             const taxText = document.getElementById('inp-tax-notice').value.trim();
@@ -603,15 +602,17 @@
 
                     // 외화 단가
                     if (isForeign) {
-                        subHtml += `<td class="text-right pr-2 font-semibold text-teal-800 align-middle bg-teal-50/20"><span class="float-left text-[10px] text-teal-600/50 mt-1">${currencySym}</span>${fmt(c.fgn)}</td>`;
+                        subHtml += `<td class="text-right pr-2 align-middle bg-emerald-50/30 whitespace-nowrap">
+                            <span class="inline-block bg-emerald-100 text-emerald-900 font-black px-2 py-0.5 rounded border border-emerald-300 shadow-sm">${fmt(c.fgn)}</span>
+                        </td>`;
                     } else {
-                        subHtml += `<td class="text-center text-slate-300 align-middle bg-slate-50/50">-</td>`; // 외화그룹 아니면 대시처리
+                        subHtml += `<td class="text-center text-slate-300 align-middle bg-slate-50/50 whitespace-nowrap">-</td>`; // 외화그룹 아니면 대시처리
                     }
 
                     // 원화 단가 & 총금액 & 비고
                     subHtml += `
-                        <td class="text-right pr-2 font-semibold text-slate-800 align-middle">${fmt(k)}</td>
-                        <td class="text-right pr-2 font-extrabold text-slate-900 align-middle">${fmtTotal(rowTot)}</td>
+                        <td class="text-right pr-2 font-bold text-slate-700 align-middle whitespace-nowrap">${fmt(k)}</td>
+                        <td class="text-right pr-2 font-black text-slate-900 align-middle whitespace-nowrap text-[13px]">${fmtTotal(rowTot)}</td>
                         <td class="text-center px-1 text-slate-600 tracking-tight break-keep align-middle">
                             <div contenteditable="true" class="edit-input w-full" onkeydown="handleEditKeydown(event)">${esc(c.note)}</div>
                         </td>
