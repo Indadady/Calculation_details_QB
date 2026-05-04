@@ -171,6 +171,16 @@
                 <h2 class="text-lg font-black text-slate-800">📋 데이터 입력</h2>
                 <button onclick="clearForm()" class="text-xs text-slate-500 hover:text-red-500 font-bold border border-slate-300 px-2 py-1 rounded transition hover:bg-red-50">초기화 ↺</button>
             </div>
+
+            <!-- 데이터 저장 / 불러오기 영역 -->
+            <div class="bg-blue-50/50 p-3 rounded border border-blue-200 mb-5 flex justify-between items-center">
+                <span class="text-[12px] font-extrabold text-blue-800 flex items-center gap-1">💾 데이터 파일 관리</span>
+                <div class="flex gap-2">
+                    <button onclick="document.getElementById('import-file').click()" class="text-[11px] font-bold bg-white border border-teal-500 text-teal-700 px-2 py-1 rounded hover:bg-teal-50 transition shadow-sm">📂 JSON 불러오기</button>
+                    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+                    <button onclick="exportData()" class="text-[11px] font-bold bg-white border border-indigo-500 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-50 transition shadow-sm">⬇️ JSON 다운로드</button>
+                </div>
+            </div>
             
             <!-- 1. 기본 정보 -->
             <div class="form-section">
@@ -192,19 +202,19 @@
                     </div>
                     <div class="col-span-2">
                         <label class="input-label">고객명 (기관명)</label>
-                        <input type="text" id="inp-client-name" class="input-field font-bold text-slate-900" value="문곡중학교" oninput="renderApp()">
+                        <input type="text" id="inp-client-name" class="input-field font-bold text-slate-900" value="고객명 입력" oninput="renderApp()">
                     </div>
                     <div class="col-span-2">
                         <label class="input-label">행사명</label>
-                        <input type="text" id="inp-event-title" class="input-field" value="일본 오사카 역사문화 탐방" oninput="renderApp()">
+                        <input type="text" id="inp-event-title" class="input-field" value="해외 연수 프로그램" oninput="renderApp()">
                     </div>
                     <div class="col-span-2">
                         <label class="input-label">여행일자 및 기간</label>
-                        <input type="text" id="inp-date" class="input-field" value="2026.05.12 ~ 05.15 (3박 4일)" oninput="renderApp()">
+                        <input type="text" id="inp-date" class="input-field" value="2026.05.10 ~ 05.15" oninput="renderApp()">
                     </div>
                     <div class="col-span-2">
                         <label class="input-label">여행인원 표기</label>
-                        <input type="text" id="inp-pax" class="input-field" value="38명 기준 (학생 33명 + 교사 5명)" oninput="renderApp()">
+                        <input type="text" id="inp-pax" class="input-field" value="10명" oninput="renderApp()">
                     </div>
                     <div class="col-span-2">
                         <label class="input-label">발송일자</label>
@@ -219,16 +229,16 @@
                                 <label class="input-label">통화 선택</label>
                                 <select id="inp-currency" class="input-field font-bold text-blue-900" onchange="handleCurrencyChange()">
                                     <option value="USD" data-sym="$" data-name="달러">USD (미국 달러)</option>
-                                    <option value="JPY" data-sym="¥" data-name="엔" selected>JPY (일본 엔)</option>
+                                    <option value="JPY" data-sym="¥" data-name="엔">JPY (일본 엔)</option>
                                     <option value="CNY" data-sym="¥" data-name="위안">CNY (중국 위안)</option>
                                     <option value="AUD" data-sym="A$" data-name="호주달러">AUD (호주 달러)</option>
                                     <option value="NZD" data-sym="NZ$" data-name="뉴질랜드달러">NZD (뉴질랜드 달러)</option>
-                                    <option value="EUR" data-sym="€" data-name="유로">EUR (유로)</option>
+                                    <option value="EUR" data-sym="€" data-name="유로" selected>EUR (유로)</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="input-label">적용 환율 (송금기준)</label>
-                                <input type="number" id="inp-exrate" class="input-field font-bold text-right text-rose-700 bg-rose-50" value="9.2" step="0.01" oninput="renderApp()">
+                                <input type="number" id="inp-exrate" class="input-field font-bold text-right text-rose-700 bg-rose-50" value="1500" step="0.01" oninput="renderApp()">
                             </div>
                         </div>
                     </div>
@@ -386,20 +396,91 @@
         // State Data
         let costs = {
             g1: [
-                { name: "에어부산", desc: "인천-오사카-인천", qty: 38, fgn: 0, krw: 326900, note: "예상가" },
-                { name: "발권수수료", desc: "대리점", qty: 38, fgn: 0, krw: 22000, note: "" }
+                { name: "항공료", desc: "왕복 항공권", qty: 10, fgn: 0, krw: 598500, note: "예상가" }
             ],
             g2: [
-                { name: "호텔", desc: "비즈니스호텔 3박 (2인실)", qty: 19, fgn: 30000, krw: 0, note: "조식포함" },
-                { name: "차량비", desc: "대형버스 4일 (가이드 겸용)", qty: 1, fgn: 250000, krw: 0, note: "톨게이트/주차비 포함" },
-                { name: "식비", desc: "중/석식 (총 6회)", qty: 38, fgn: 12000, krw: 0, note: "회당 2,000엔 기준" },
-                { name: "관광지", desc: "오사카성, 유니버셜 스튜디오", qty: 38, fgn: 10000, krw: 0, note: "USJ 프리패스 포함" }
+                { name: "해외현지 발생비용", desc: "숙박, 차량, 식사 등 지상비 일체", qty: 10, fgn: 1500, krw: 0, note: "" }
             ],
             g3: [
-                { name: "여행자보험", desc: "해외여행자보험 1억원", qty: 38, fgn: 0, krw: 8000, note: "주민번호 필요" },
-                { name: "진행수수료", desc: "운영 및 기획 관리비", qty: 1, fgn: 0, krw: 1800000, note: "" }
+                { name: "여행자보험", desc: "해외여행자보험 1억원", qty: 10, fgn: 0, krw: 20000, note: "주민번호 필요" },
+                { name: "진행수수료", desc: "운영 및 기획 관리비", qty: 1, fgn: 0, krw: 1500000, note: "" }
             ]
         };
+
+        // ================= JSON 데이터 추출 및 렌더링 영역 =================
+        function getFormData() {
+            return {
+                costFontSize: document.getElementById('inp-font-size-cost').value,
+                costTitle: document.getElementById('inp-cost-title').value,
+                clientName: document.getElementById('inp-client-name').value,
+                eventTitle: document.getElementById('inp-event-title').value,
+                date: document.getElementById('inp-date').value,
+                pax: document.getElementById('inp-pax').value,
+                issue: document.getElementById('inp-issue').value,
+                currency: document.getElementById('inp-currency').value,
+                exRate: document.getElementById('inp-exrate').value,
+                group1: document.getElementById('inp-group-1').value,
+                group2: document.getElementById('inp-group-2').value,
+                group3: document.getElementById('inp-group-3').value,
+                taxNotice: document.getElementById('inp-tax-notice').value,
+                costs: JSON.parse(JSON.stringify(costs)) // 깊은 복사로 상태 저장
+            };
+        }
+
+        function setFormData(data) {
+            if(!data) return;
+            if(data.costFontSize) { document.getElementById('inp-font-size-cost').value = data.costFontSize; changeCostFontSize(); }
+            if(data.costTitle !== undefined) document.getElementById('inp-cost-title').value = data.costTitle;
+            if(data.clientName !== undefined) document.getElementById('inp-client-name').value = data.clientName;
+            if(data.eventTitle !== undefined) document.getElementById('inp-event-title').value = data.eventTitle;
+            if(data.date !== undefined) document.getElementById('inp-date').value = data.date;
+            if(data.pax !== undefined) document.getElementById('inp-pax').value = data.pax;
+            if(data.issue !== undefined) document.getElementById('inp-issue').value = data.issue;
+            if(data.currency !== undefined) document.getElementById('inp-currency').value = data.currency;
+            if(data.exRate !== undefined) document.getElementById('inp-exrate').value = data.exRate;
+            if(data.group1 !== undefined) document.getElementById('inp-group-1').value = data.group1;
+            if(data.group2 !== undefined) document.getElementById('inp-group-2').value = data.group2;
+            if(data.group3 !== undefined) document.getElementById('inp-group-3').value = data.group3;
+            if(data.taxNotice !== undefined) document.getElementById('inp-tax-notice').value = data.taxNotice;
+            
+            if(data.costs) costs = JSON.parse(JSON.stringify(data.costs));
+
+            renderInputs();
+            renderApp();
+        }
+
+        function exportData() {
+            const data = getFormData();
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const clientTitle = document.getElementById('inp-client-name').value || '새_견적';
+            a.download = `큐비글로벌_견적데이터_${clientTitle.replace(/\s+/g, '_')}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    setFormData(json);
+                    alert('데이터를 성공적으로 불러왔습니다.');
+                } catch(err) {
+                    alert('파일을 읽는 중 오류가 발생했습니다. 올바른 JSON 파일인지 확인해주세요.');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = ''; // 동일 파일 재업로드 버그 방지
+        }
+        // =============================================================
 
         function changeCostFontSize() {
             const size = document.getElementById('inp-font-size-cost').value;
@@ -422,7 +503,7 @@
             const sel = document.getElementById('inp-currency');
             const code = sel.value;
             // 기본 환율 세팅 예시
-            const rates = { 'USD': 1350, 'JPY': 9.2, 'CNY': 190, 'AUD': 900, 'NZD': 820, 'EUR': 1480 };
+            const rates = { 'USD': 1350, 'JPY': 9.2, 'CNY': 190, 'AUD': 900, 'NZD': 820, 'EUR': 1500 };
             document.getElementById('inp-exrate').value = rates[code] || 1000;
             renderApp();
         }
