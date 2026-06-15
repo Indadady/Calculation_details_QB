@@ -145,29 +145,29 @@
 
     /* ============ A4 미리보기 ============ */
     .a4-sheet { background: #fff; width: 100%; max-width: 850px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,.28); border-radius: 4px; position: relative; }
-    .doc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 16px; border-bottom: 3px solid #0f172a; }
+    .doc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 16px; border-bottom: 3px solid #0d9488; }
     .doc-header-left { width: 52%; }
     .doc-header-right { width: 42%; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; min-height: 110px; }
     .doc-header-right img { height: 42px; object-fit: contain; }
     .doc-title-area { text-align: right; margin-top: auto; }
-    .doc-title-area h2 { font-size: 26px; font-weight: 900; letter-spacing: .14em; color: #0f172a; line-height: 1.1; }
-    .doc-title-area p { font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: .25em; margin-top: 4px; text-transform: uppercase; }
+    .doc-title-area h2 { display: inline-block; font-size: 26px; font-weight: 900; letter-spacing: .14em; color: #0f766e; line-height: 1.1; border-bottom: 3px solid #0d9488; padding-bottom: 5px; }
+    .doc-title-area p { font-size: 10px; color: #14b8a6; font-weight: 700; letter-spacing: .25em; margin-top: 5px; text-transform: uppercase; }
     .info-table { width: 100%; border-collapse: collapse; }
     .info-table th, .info-table td { padding: 5px 8px; font-size: 12px; }
-    .info-table th { background: #f1f5f9; color: #334155; font-weight: 700; text-align: center; width: 26%; border: 1px solid #e2e8f0; }
-    .info-table td { color: #0f172a; border: 1px solid #e2e8f0; }
+    .info-table th { background: #ecfdf5; color: #0f766e; font-weight: 700; text-align: center; width: 26%; border: 1px solid #cdeee4; }
+    .info-table td { color: #0f172a; border: 1px solid #cdeee4; }
 
-    .main-table { width: 100%; border-collapse: collapse; table-layout: fixed; border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a; margin-top: 14px; }
+    .main-table { width: 100%; border-collapse: collapse; table-layout: fixed; border-top: 2px solid #0f766e; border-bottom: 2px solid #0f766e; margin-top: 14px; }
     .main-table th, .main-table td { border: 1px solid #cbd5e1; padding: 6px 7px; vertical-align: middle; overflow: hidden; word-break: keep-all; color: #1e293b; }
-    .main-table th { text-align: center; font-weight: 700; background: #f1f5f9; color: #0f172a; font-size: calc(var(--cost-fs) * 1.04); }
+    .main-table th { text-align: center; font-weight: 700; background: #0f766e; color: #fff; border-color: #0f766e; font-size: calc(var(--cost-fs) * 1.04); }
     .main-table td { font-size: var(--cost-fs); line-height: 1.45; }
     .main-table tbody tr { height: 28px; }
     .text-center { text-align: center; } .text-right { text-align: right; } .text-left { text-align: left; }
     .font-bold { font-weight: 700; } .font-black { font-weight: 900; } .font-semibold { font-weight: 600; }
     .bg-gray-50 { background: #f8fafc; } .bg-fgn { background: #f0fdfa; }
     .fgn-sym { float: left; font-size: 9px; color: #14b8a6; font-weight: 700; }
-    .subtotal-row td { background: #f1f5f9; font-weight: 700; border-bottom: 2px solid #94a3b8 !important; padding: 7px; }
-    .grand-row td { background: #f8fafc; font-weight: 800; border-top: 2px solid #0f172a !important; padding: 8px; }
+    .subtotal-row td { background: #ecfdf5; font-weight: 700; border-bottom: 2px solid #5eead4 !important; padding: 7px; }
+    .grand-row td { background: #f0fdfa; font-weight: 800; border-top: 2px solid #0f766e !important; padding: 8px; }
     .grand-row-last td { border-bottom: none !important; }
     .grand-amount { font-size: calc(var(--cost-fs) * 1.25); } .grand-label { font-size: var(--cost-fs); }
     .hl-text { color: #dc2626 !important; font-weight: 900 !important; }
@@ -359,7 +359,7 @@
           [세금계산서 발행 관련 안내문] 하단에 노출하기
         </label>
         <div class="form-row cols-1">
-          <textarea id="inp-taxNote" class="form-input" style="height:90px; font-size:12px;">* 본 위탁용역의 특성상 항공권, 숙박비, 현지교통비 등은 당사가 직접 제공하는 서비스가 아닌, 제 3자와의 거래를 통한 수탁 대행 처리 항목으로 분류됩니다. 따라서, 당사는 전체 계약금액 기준의 세금계산서 발행이 불가하며, 국내 과세 대상 경비 중 알선수수료 등 자체수익에 대해서만 세금계산서를 발행함을 사전 안내드립니다.</textarea>
+          <textarea id="inp-taxNote" class="form-input" style="height:90px; font-size:12px;">※ 본 견적의 항공료·숙박비·현지 지상비 등은 당사가 직접 공급하는 용역이 아니라, 현지 협력사 및 제3자와의 거래를 당사가 위탁받아 대행·정산하는 항목입니다. 이에 따라 계약 총액 전체에 대한 세금계산서 발행은 어려우며, 국내에서 과세되는 당사 자체 수익(기획·진행 수수료 등)에 한하여 세금계산서가 발행됨을 미리 안내드립니다.</textarea>
         </div>
         <div class="form-row cols-1" style="margin-top:8px;">
           <div>
@@ -642,9 +642,9 @@
       <th style="width:13%">항목</th>
       <th style="width:19%">내용</th>
       <th style="width:8%">수량</th>
-      <th style="width:13%; background:#f0fdfa; color:#0f766e;">${m.name} 단가<br><span style="font-weight:400;font-size:.85em;color:#64748b;">${m.code}</span></th>
-      <th style="width:13%">원화 단가<br><span style="font-weight:400;font-size:.85em;">KRW</span></th>
-      <th style="width:14%">총금액<br><span style="font-weight:400;font-size:.85em;">KRW</span></th>
+      <th style="width:13%; background:#14b8a6; border-color:#14b8a6;">${m.name} 단가<br><span style="font-weight:400;font-size:.85em;color:#d1fae5;">${m.code}</span></th>
+      <th style="width:13%">원화 단가<br><span style="font-weight:400;font-size:.85em;color:#a7f3d0;">KRW</span></th>
+      <th style="width:14%">총금액<br><span style="font-weight:400;font-size:.85em;color:#a7f3d0;">KRW</span></th>
       <th style="width:11%">비고</th>
     </tr>`;
 
@@ -658,7 +658,7 @@
     const grand = r1.sum + r2.sum + r3.sum;
     const noFlight = r2.sum + r3.sum;
     const special = escAttr($('#inp-specialNote').value.trim());
-    let totalHtml = `<tr class="grand-row"><td colspan="6" class="text-center grand-label" style="font-weight:900; letter-spacing:.15em; color:#1d4ed8;">전 체 합 계 금 액</td><td colspan="2" class="text-right grand-amount" style="color:#1d4ed8;">₩${fmtT(grand)}</td></tr>`;
+    let totalHtml = `<tr class="grand-row"><td colspan="6" class="text-center grand-label" style="font-weight:900; letter-spacing:.15em; color:#0f766e;">전 체 합 계 금 액</td><td colspan="2" class="text-right grand-amount" style="color:#0f766e;">₩${fmtT(grand)}</td></tr>`;
     if (r1.sum > 0 && noFlight > 0) {
       totalHtml += `<tr class="grand-row ${special ? '' : 'grand-row-last'}"><td colspan="6" class="text-center grand-label">${escAttr(g2n)} + ${escAttr(g3n)} 합계 <span style="font-size:.85em;font-weight:400;color:#64748b;">(${escAttr(g1n)} 제외)</span></td><td colspan="2" class="text-right grand-amount" style="font-size:calc(var(--cost-fs)*1.1);">₩${fmtT(noFlight)}</td></tr>`;
     }
