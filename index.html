@@ -1,779 +1,933 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>큐비글로벌 스마트 가격 산출 내역서</title>
-    
-    <meta property="og:title" content="큐비글로벌 스마트 가격 산출 내역서">
-    <meta property="og:description" content="최신 UI/UX가 적용된 해외 행사 전용 견적 시스템">
-    <meta property="og:image" content="https://blogger.googleusercontent.com/img/a/AVvXsEjPMO83G1xHJIu1jKvn1GjQn_C3z42tM-LYvYPKcGIaYkarv47vw5TlYsJFjZxRLVm4e0yQutvIHXQ_VBUHdlu2p25QP7z1NAK2XsEUNUpxycDMpLzi7TJ390gXDpD5orf1OBAXwbwnPrasas06glRIv9rpqwN1YEQvy2fPbKRU4Ogpbo8SyH7NEnt-1FY=w320-h101">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>큐비글로벌 스마트 가격 산출 내역서</title>
+  <meta property="og:title" content="큐비글로벌 스마트 가격 산출 내역서">
+  <meta property="og:description" content="해외 행사 전용 가격 산출 내역 시스템 (외화 자동 환산 · 검수 · 양식 보관)">
+  <meta property="og:image" content="https://blogger.googleusercontent.com/img/a/AVvXsEjPMO83G1xHJIu1jKvn1GjQn_C3z42tM-LYvYPKcGIaYkarv47vw5TlYsJFjZxRLVm4e0yQutvIHXQ_VBUHdlu2p25QP7z1NAK2XsEUNUpxycDMpLzi7TJ390gXDpD5orf1OBAXwbwnPrasas06glRIv9rpqwN1YEQvy2fPbKRU4Ogpbo8SyH7NEnt-1FY=w320-h101">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLH9GD9SVR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JLH9GD9SVR');
+  </script>
+  <style>
+    :root { --cost-fs: 12px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif; background: #eef2f6; color: #1f2937; -webkit-text-size-adjust: 100%; }
 
-    <!-- 구글 애널리틱스 (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLH9GD9SVR"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-JLH9GD9SVR');
-    </script>
+    /* ============ 상단 헤더 (큐비글로벌 다크 + 틸 포인트) ============ */
+    .top-header { background: #0b1324; color: #e2e8f0; padding: 10px 22px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-left img { height: 30px; object-fit: contain; filter: brightness(0) invert(1); }
+    .header-left h1 { font-size: 15px; font-weight: 700; color: #5eead4; border-left: 1px solid #334155; padding-left: 12px; white-space: nowrap; letter-spacing: .01em; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-total { font-size: 13px; font-weight: 600; color: #94a3b8; margin-right: 4px; white-space: nowrap; }
+    .header-total b { color: #fbbf24; font-size: 17px; font-weight: 900; letter-spacing: -.02em; }
+    .btn-pdf, .btn-html { color: #fff; border: none; padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all .18s; }
+    .btn-html { background: #0d9488; } .btn-html:hover { background: #0f766e; }
+    .btn-pdf { background: #2563eb; } .btn-pdf:hover { background: #1d4ed8; }
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    /* ============ 모바일 탭 ============ */
+    .mobile-tabs { display: none; background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 51px; z-index: 99; }
+    .mobile-tabs button { flex: 1; padding: 13px 0; border: none; background: transparent; font-size: 14px; font-weight: 700; color: #64748b; cursor: pointer; position: relative; font-family: inherit; }
+    .mobile-tabs button.active { color: #0f766e; }
+    .mobile-tabs button.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: #0d9488; }
 
-        :root {
-            /* 폰트 사이즈 독립 변수 설정 */
-            --cost-fs: 12px;
-        }
+    /* ============ 레이아웃 ============ */
+    .main-layout { display: flex; height: calc(100vh - 51px); overflow: hidden; }
+    .panel-input { width: 530px; flex-shrink: 0; background: #fff; border-right: 1px solid #e2e8f0; padding: 22px; box-shadow: 4px 0 12px rgba(0,0,0,.02); z-index: 10; display: flex; flex-direction: column; position: relative; }
+    .panel-input-scroll { flex: 1; overflow-y: auto; scroll-behavior: smooth; padding-bottom: 84px; }
+    .panel-input h2 { font-size: 18px; font-weight: 800; border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 18px; color: #0f172a; display: flex; align-items: center; gap: 8px; }
+    .panel-preview { flex: 1; overflow: auto; background: #5b626b; display: flex; justify-content: center; align-items: flex-start; padding: 32px 16px; }
 
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; }
-        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background-color: #f1f5f9; color: #0f172a; overflow: hidden; }
+    /* ============ 템플릿 보관함 ============ */
+    .template-manager { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 9px; padding: 15px; margin-bottom: 22px; }
+    .template-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .template-header span { font-size: 13px; font-weight: 800; color: #115e59; display: flex; align-items: center; gap: 6px; }
+    .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #64748b; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: .18s; font-family: inherit; }
+    .btn-clear:hover { background: #fef2f2; color: #ef4444; border-color: #fca5a5; }
+    .template-controls { display: flex; gap: 8px; }
+    .template-select { flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; font-size: 13px; outline: none; transition: .18s; font-family: inherit; background: #fff; }
+    .template-search { width: 128px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; font-size: 13px; outline: none; background: #fff; transition: .18s; font-family: inherit; }
+    .template-select:focus, .template-search:focus, .form-input:focus, .form-select:focus, .slot-input:focus, .exrate-input:focus { border-color: #14b8a6; box-shadow: 0 0 0 2px rgba(20,184,166,.15); }
+    .btn-row { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-load, .btn-save, .btn-delete { border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: .18s; font-family: inherit; }
+    .btn-load { background: #0f766e; color: #fff; flex: 1; } .btn-load:hover { background: #115e59; }
+    .btn-save { background: #2563eb; color: #fff; flex: 1; } .btn-save:hover { background: #1d4ed8; }
+    .btn-delete { background: #fff; color: #ef4444; border: 1px solid #fca5a5; } .btn-delete:hover { background: #fef2f2; border-color: #ef4444; }
+    .backup-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; padding-top: 10px; margin-top: 10px; border-top: 1px dashed #99f6e4; }
+    .btn-mini { border: none; padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: .18s; background: #fff; font-family: inherit; }
+    .btn-share { color: #0284c7; border: 1px solid #7dd3fc; } .btn-share:hover { background: #e0f2fe; }
+    .btn-backup { color: #059669; border: 1px solid #6ee7b7; } .btn-backup:hover { background: #ecfdf5; }
+    .btn-restore { color: #d97706; border: 1px solid #fcd34d; } .btn-restore:hover { background: #fffbeb; }
 
-        /* 스크롤바 커스텀 */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f8fafc; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    /* ============ 검수 경고 ============ */
+    .warning-panel { background: #fef2f2; border: 1px solid #f87171; border-radius: 9px; padding: 15px; margin-bottom: 22px; color: #991b1b; }
+    .warning-panel.hidden { display: none; }
+    .warning-title { font-weight: 800; font-size: 14px; margin-bottom: 9px; display: flex; align-items: center; gap: 6px; color: #b91c1c; }
+    .warning-list { list-style: none; font-size: 13px; line-height: 1.6; }
+    .warning-list li { position: relative; padding-left: 16px; cursor: pointer; transition: color .18s; margin-bottom: 4px; }
+    .warning-list li:hover { color: #dc2626; text-decoration: underline; }
+    .warning-list li::before { content: '•'; position: absolute; left: 0; color: #ef4444; font-weight: bold; }
+    .error-border { border: 2px solid #ef4444 !important; background: #fef2f2 !important; }
+    .error-row-container { border: 1px solid #f87171 !important; box-shadow: 0 0 0 2px rgba(239,68,68,.2); }
 
-        /* 슬라이더(Range) 커스텀 스타일 */
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #0d9488; cursor: pointer; margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #99f6e4; border-radius: 2px; }
-        input[type=range]:focus { outline: none; }
+    /* ============ 폼 ============ */
+    .form-group { margin-bottom: 24px; background: #fff; padding: 16px; border: 1px solid #e2e8f0; border-radius: 9px; }
+    .form-group.highlight { border-color: #5eead4; background: #f0fdfa; }
+    .section-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; color: #0f172a; display: flex; align-items: center; gap: 8px; }
+    .section-title::before { content: ''; display: block; width: 4px; height: 16px; border-radius: 2px; }
+    .teal::before { background: #0d9488; } .blue::before { background: #2563eb; } .indigo::before { background: #4f46e5; } .green::before { background: #059669; } .orange::before { background: #ea580c; } .dark::before { background: #334155; }
+    .form-row { display: grid; gap: 12px; margin-bottom: 12px; }
+    .form-row.cols-2 { grid-template-columns: 1fr 1fr; } .form-row.cols-1 { grid-template-columns: 1fr; }
+    .form-label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px; }
+    .form-input, .form-select { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-size: 13px; font-family: inherit; outline: none; transition: .18s; color: #1e293b; background: #fff; }
+    .form-select { font-weight: 700; color: #0f172a; cursor: pointer; }
+    textarea.form-input { resize: vertical; line-height: 1.5; }
 
-        /* 레이아웃 (좌측 입력, 우측 미리보기) */
-        .app-container { display: flex; height: calc(100vh - 56px); width: 100vw; }
+    /* 그룹명 인라인 입력 */
+    .group-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+    .group-name-row .gn-icon { font-size: 13px; font-weight: 800; flex-shrink: 0; }
+    .group-name-input { flex: 1; font-size: 13px; font-weight: 800; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; outline: none; transition: .18s; font-family: inherit; background: #f8fafc; }
+    .group-name-input:focus { border-color: #14b8a6; box-shadow: 0 0 0 2px rgba(20,184,166,.12); }
 
-        .input-panel {
-            flex: 4; min-width: 480px; max-width: 550px; background-color: white;
-            border-right: 1px solid #cbd5e1; overflow-y: auto; padding: 24px;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.03); z-index: 10;
-        }
+    /* 폰트 크기 슬라이더 (QB 고유 기능) */
+    .fs-slider-box { background: #fff; border: 1px solid #5eead4; border-radius: 8px; padding: 12px; margin-bottom: 14px; }
+    .fs-slider-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .fs-slider-head label { font-size: 12px; font-weight: 800; color: #0f766e; display: flex; align-items: center; gap: 4px; }
+    .fs-badge { font-size: 11px; font-weight: 900; color: #fff; background: #0d9488; padding: 2px 9px; border-radius: 999px; }
+    input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #99f6e4; border-radius: 2px; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #0d9488; cursor: pointer; margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    input[type=range]::-moz-range-track { width: 100%; height: 4px; background: #99f6e4; border-radius: 2px; }
+    input[type=range]::-moz-range-thumb { height: 16px; width: 16px; border: none; border-radius: 50%; background: #0d9488; cursor: pointer; }
 
-        .preview-panel {
-            flex: 6; background-color: #525659; overflow-y: auto; padding: 40px 20px;
-            display: flex; flex-direction: column; align-items: center;
-        }
+    /* 환율 */
+    .exrate-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 11px; background: #fff; border-radius: 7px; border: 1px solid #fbcfe8; }
+    .exrate-row label { font-size: 12px; font-weight: 800; color: #be185d; white-space: nowrap; }
+    .exrate-input { width: 110px; border: 1px solid #f9a8d4; border-radius: 6px; padding: 6px 10px; font-size: 14px; text-align: right; font-weight: 800; color: #be185d; background: #fdf2f8; font-family: inherit; outline: none; }
+    .exrate-hint { font-size: 12px; color: #64748b; }
 
-        /* A4 용지 기본 세팅 */
-        .a4-sheet { 
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            padding: 15mm 12mm;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            margin-bottom: 30px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-sizing: border-box;
-        }
+    /* ============ 입력 카드 (드래그/강조/삭제) ============ */
+    .slot-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; position: relative; transition: box-shadow .18s, border-color .18s; box-shadow: 0 1px 2px rgba(0,0,0,.02); cursor: grab; }
+    .slot-card:active { cursor: grabbing; }
+    .slot-card:hover { border-color: #94a3b8; box-shadow: 0 4px 6px rgba(0,0,0,.05); }
+    .slot-card.dragging { opacity: .6; border: 2px dashed #14b8a6; cursor: grabbing; box-shadow: 0 10px 15px rgba(0,0,0,.1); z-index: 50; }
+    .slot-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed #e2e8f0; }
+    .drag-handle { color: #94a3b8; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; user-select: none; }
+    .slot-card:hover .drag-handle { color: #475569; }
+    .btn-toggle-hl { background: none; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 11px; padding: 2px 7px; cursor: pointer; color: #64748b; transition: .18s; font-weight: 700; font-family: inherit; }
+    .btn-toggle-hl:hover { background: #f1f5f9; color: #1e293b; }
+    .btn-toggle-hl.active { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+    .btn-delete-row { background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1; border-radius: 4px; transition: .18s; }
+    .btn-delete-row:hover { color: #ef4444; background: #fee2e2; }
+    .slot-grid { display: grid; grid-template-columns: 3fr 4fr 2fr 3fr; gap: 8px; margin-bottom: 8px; }
+    .slot-input { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; font-size: 12px; font-family: inherit; outline: none; background: #f8fafc; cursor: text; }
+    .slot-input.amount { font-weight: 700; color: #0f172a; text-align: right; }
+    .slot-input.fgn { background: #ecfdf5; border-color: #6ee7b7; color: #065f46; font-weight: 800; }
+    .btn-add-item { width: 100%; background: #fff; border: 1px dashed #cbd5e1; color: #64748b; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .18s; margin-top: 4px; font-family: inherit; }
+    .btn-add-item:hover { background: #f0fdfa; border-color: #5eead4; color: #0f766e; }
+    .hint-text { font-size: 11px; color: #64748b; margin-bottom: 10px; line-height: 1.45; }
 
-        /* 테이블 기본 */
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        thead { display: table-header-group; }
-        tfoot { display: table-footer-group; }
-        th, td { border: 1px solid #94a3b8; padding: 6px; word-break: keep-all; overflow-wrap: break-word; vertical-align: middle; }
-        th { background-color: #f8fafc; font-weight: 700; color: #1e293b; text-align: center; }
+    /* 라이브 합계 바 */
+    .live-summary-bar { position: absolute; bottom: 0; left: 0; right: 0; background: #0b1324; color: #f8fafc; padding: 15px 22px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -4px 10px rgba(0,0,0,.12); z-index: 50; }
+    .live-summary-bar .label { font-size: 13px; font-weight: 600; color: #94a3b8; }
+    .live-summary-bar .total-amount { font-size: 22px; font-weight: 900; color: #fbbf24; }
 
-        /* 동적 글자 크기 적용 영역 */
-        .cost-table th { font-size: calc(var(--cost-fs) * 1.05) !important; }
-        .cost-table td, .cost-table span, .subtotal-row td, .cost-table .edit-input { font-size: var(--cost-fs) !important; line-height: 1.5; }
+    /* ============ A4 미리보기 ============ */
+    .a4-sheet { background: #fff; width: 100%; max-width: 850px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,.28); border-radius: 4px; position: relative; }
+    .doc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 16px; border-bottom: 3px solid #0f172a; }
+    .doc-header-left { width: 52%; }
+    .doc-header-right { width: 42%; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; min-height: 110px; }
+    .doc-header-right img { height: 42px; object-fit: contain; }
+    .doc-title-area { text-align: right; margin-top: auto; }
+    .doc-title-area h2 { font-size: 26px; font-weight: 900; letter-spacing: .14em; color: #0f172a; line-height: 1.1; }
+    .doc-title-area p { font-size: 10px; color: #64748b; font-weight: 700; letter-spacing: .25em; margin-top: 4px; text-transform: uppercase; }
+    .info-table { width: 100%; border-collapse: collapse; }
+    .info-table th, .info-table td { padding: 5px 8px; font-size: 12px; }
+    .info-table th { background: #f1f5f9; color: #334155; font-weight: 700; text-align: center; width: 26%; border: 1px solid #e2e8f0; }
+    .info-table td { color: #0f172a; border: 1px solid #e2e8f0; }
 
-        .cost-table { border-top: 3px solid #0f172a; border-bottom: 3px solid #0f172a; margin-top: 10px; }
-        .cost-table tbody td { vertical-align: middle; }
-        .subtotal-row td { background-color: #f1f5f9; font-weight: bold; border-bottom: 2px solid #64748b; }
+    .main-table { width: 100%; border-collapse: collapse; table-layout: fixed; border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a; margin-top: 14px; }
+    .main-table th, .main-table td { border: 1px solid #cbd5e1; padding: 6px 7px; vertical-align: middle; overflow: hidden; word-break: keep-all; color: #1e293b; }
+    .main-table th { text-align: center; font-weight: 700; background: #f1f5f9; color: #0f172a; font-size: calc(var(--cost-fs) * 1.04); }
+    .main-table td { font-size: var(--cost-fs); line-height: 1.45; }
+    .main-table tbody tr { height: 28px; }
+    .text-center { text-align: center; } .text-right { text-align: right; } .text-left { text-align: left; }
+    .font-bold { font-weight: 700; } .font-black { font-weight: 900; } .font-semibold { font-weight: 600; }
+    .bg-gray-50 { background: #f8fafc; } .bg-fgn { background: #f0fdfa; }
+    .fgn-sym { float: left; font-size: 9px; color: #14b8a6; font-weight: 700; }
+    .subtotal-row td { background: #f1f5f9; font-weight: 700; border-bottom: 2px solid #94a3b8 !important; padding: 7px; }
+    .grand-row td { background: #f8fafc; font-weight: 800; border-top: 2px solid #0f172a !important; padding: 8px; }
+    .grand-row-last td { border-bottom: none !important; }
+    .grand-amount { font-size: calc(var(--cost-fs) * 1.25); } .grand-label { font-size: var(--cost-fs); }
+    .hl-text { color: #dc2626 !important; font-weight: 900 !important; }
 
-        /* 입력 폼 요소 */
-        .form-section { margin-bottom: 24px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .section-title { font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .section-title::before { content: ''; display: block; width: 4px; height: 16px; border-radius: 2px; background: #2563eb; }
-        .input-label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; }
-        .input-field { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 10px; font-size: 13px; outline: none; transition: 0.2s; background: white; }
-        .input-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
-        textarea.input-field { resize: vertical; min-height: 60px; line-height: 1.4; }
+    .footer-notes { font-size: 11px; color: #475569; padding-top: 14px; }
+    .footer-notes p.title { font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #1e293b; }
+    .footer-notes p.body { line-height: 1.6; letter-spacing: -.02em; text-align: justify; }
+    .footer-brand { text-align: center; margin-top: 22px; border-top: 1px solid #e2e8f0; padding-top: 14px; }
+    .footer-brand p { font-size: 11px; color: #64748b; }
+    .footer-brand a { display: inline-block; margin-top: 8px; padding: 6px 16px; border: 1px solid #cbd5e1; border-radius: 6px; color: #475569; text-decoration: none; font-size: 11px; font-weight: 700; transition: .18s; }
+    .footer-brand a:hover { background: #f0fdfa; color: #0f766e; border-color: #5eead4; }
 
-        /* 비용 입력 카드 */
-        .card-box { background: white; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; margin-bottom: 10px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: border 0.2s; }
-        .card-box:hover { border-color: #3b82f6; }
-        .btn-remove { position: absolute; top: -8px; right: -8px; color: white; background: #ef4444; border: none; border-radius: 50%; width: 22px; height: 22px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; font-size: 11px; z-index: 5; box-shadow: 0 2px 4px rgba(239,68,68,0.3); }
-        .btn-remove:hover { background: #dc2626; transform: scale(1.1); }
+    /* 인쇄 자동 압축 레벨 */
+    .pc-1 .main-table tbody tr { height: 26px; } .pc-2 .main-table tbody tr { height: 24px; }
+    .pc-3 .main-table tbody tr { height: 22px; } .pc-4 .main-table tbody tr { height: 21px; }
+    .pc-5 .main-table tbody tr, .pc-6 .main-table tbody tr, .pc-7 .main-table tbody tr,
+    .pc-8 .main-table tbody tr, .pc-9 .main-table tbody tr, .pc-10 .main-table tbody tr { height: 20px; }
+    .pc-3 .main-table th, .pc-3 .main-table td, .pc-4 .main-table th, .pc-4 .main-table td { padding: 4px 6px; }
+    .pc-5 .main-table th, .pc-5 .main-table td, .pc-6 .main-table th, .pc-6 .main-table td,
+    .pc-7 .main-table th, .pc-7 .main-table td, .pc-8 .main-table th, .pc-8 .main-table td,
+    .pc-9 .main-table th, .pc-9 .main-table td, .pc-10 .main-table th, .pc-10 .main-table td { padding: 3px 5px; }
 
-        /* 버튼 */
-        .btn-primary { background: #1e293b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-primary:hover { background: #0f172a; }
+    .panel-input-scroll::-webkit-scrollbar, .panel-preview::-webkit-scrollbar { width: 6px; height: 6px; }
+    .panel-input-scroll::-webkit-scrollbar-track, .panel-preview::-webkit-scrollbar-track { background: #f1f5f9; }
+    .panel-input-scroll::-webkit-scrollbar-thumb, .panel-preview::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-        /* 인라인 편집기 */
-        .edit-input { width: 100%; background: transparent; border: 1px solid transparent; outline: none; font-family: inherit; font-weight: inherit; color: inherit; transition: border 0.2s, background 0.2s; border-radius: 4px; padding: 4px; white-space: pre-wrap; word-break: keep-all; min-height: 24px; }
-        .edit-input:hover, .edit-input:focus { border: 1px dashed #93c5fd; background: #eff6ff; }
+    /* 모바일 */
+    @media (max-width: 1023px) {
+      .panel-hidden { display: none !important; }
+      .mobile-tabs { display: flex; }
+      .header-total { display: none; }
+      .main-layout { flex-direction: column; height: auto; overflow: visible; }
+      .panel-input { width: 100%; border-right: none; border-bottom: 1px solid #e2e8f0; height: calc(100vh - 104px); padding: 18px; }
+      .panel-input-scroll { padding-bottom: 80px; }
+      .panel-preview { width: 100%; padding: 20px 0; overflow-x: auto; height: auto; display: block; -webkit-overflow-scrolling: touch; }
+      .a4-sheet { min-width: 760px; width: 760px; padding: 24px; margin: 0 12px; }
+      .slot-grid, .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .top-header { padding: 10px 12px; } .header-left h1 { font-size: 12px; }
+      .a4-sheet { min-width: 680px; width: 680px; padding: 20px; }
+    }
 
-        /* === 고품질 인쇄(PDF) 대응 === */
-        @page { size: A4 portrait; margin: 0; }
-
-        @media print {
-            /* 기본 레이아웃 초기화 */
-            html, body { width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; background: white !important; }
-            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; font-size: 12px; line-height: 1.45; }
-            .top-nav, .input-panel, .no-print { display: none !important; }
-            .app-container { height: auto !important; display: block !important; width: 100% !important; }
-            .preview-panel { display: block !important; width: 100% !important; padding: 0 !important; margin: 0 !important; background: white !important; overflow: visible !important; }
-            
-            /* A4 인쇄 규격 */
-            .a4-sheet {
-                width: 210mm !important; min-height: 297mm !important; height: auto !important; margin: 0 auto !important;
-                padding: 12mm 12mm 14mm 12mm !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important;
-                position: relative !important; transform: none !important; page-break-after: always !important; break-after: page !important;
-            }
-            .a4-sheet:last-child { page-break-after: auto !important; break-after: auto !important; }
-            
-            /* 테이블 인쇄 레이아웃 버그 해결 (핵심) */
-            table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
-            thead { display: table-header-group !important; } 
-            tfoot { display: table-footer-group !important; }
-            
-            /* WebKit 병합(Rowspan) 버그 방지를 위해 tbody 단위로 쪼개고 페이지 쪼개짐 방지 */
-            .print-avoid-break { page-break-inside: avoid !important; break-inside: avoid !important; }
-            tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-            /* td, th에 avoid를 넣으면 크롬에서 그리드가 파괴되므로 무조건 auto 유지 */
-            td, th { page-break-inside: auto !important; break-inside: auto !important; }
-
-            .cost-table th { font-size: calc(var(--cost-fs) * 1.05) !important; background-color: #e5e7eb !important; }
-            .cost-table td, .cost-table span, .subtotal-row td { font-size: var(--cost-fs) !important; }
-
-            .cost-table { border-top: 2px solid #000 !important; border-bottom: 2px solid #000 !important; margin-top: 8px !important; }
-            th, td { border: 1px solid #000 !important; padding: 4px 3px !important; color: #000 !important; word-break: keep-all !important; overflow-wrap: break-word !important; }
-            
-            /* 인라인 편집기 및 텍스트 요소 리셋 */
-            .edit-input { border: none !important; background: transparent !important; padding: 0 !important; min-height: auto !important; }
-            p, h1, h2, h3, h4, h5, h6 { page-break-inside: avoid !important; color: #000 !important; }
-            
-            img, svg { max-width: 100% !important; image-rendering: -webkit-optimize-contrast; print-color-adjust: exact !important; }
-            
-            #page-cost { padding-top: 10mm !important; padding-bottom: 10mm !important; }
-            .calc-powered { margin-top: 20px !important; padding-top: 10px !important; border-top: 1px solid #000 !important; }
-        }
-    </style>
+    /* 인쇄 */
+    @media print {
+      *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      html, body { width: 100% !important; background: #fff !important; margin: 0 !important; padding: 0 !important; }
+      .no-print, .top-header, .mobile-tabs, .panel-input { display: none !important; }
+      .main-layout { display: block !important; height: auto !important; overflow: visible !important; }
+      .panel-preview { background: #fff !important; padding: 0 !important; overflow: visible !important; display: block !important; height: auto !important; width: 100% !important; margin: 0 !important; }
+      .a4-sheet { box-shadow: none !important; max-width: 100% !important; width: 100% !important; min-width: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; overflow: hidden !important; page-break-inside: avoid; }
+      .main-table, .info-table { table-layout: fixed !important; width: 100% !important; word-break: keep-all !important; }
+      .main-table th, .main-table td { overflow: hidden !important; white-space: normal !important; word-break: keep-all !important; }
+      .footer-brand a { display: none !important; }
+      tr { page-break-inside: avoid !important; }
+      @page { size: A4 portrait; margin: 10mm; }
+    }
+  </style>
 </head>
 <body>
+<div class="top-header no-print">
+  <div class="header-left">
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="QB Global">
+    <h1>큐비글로벌 스마트 산출내역서</h1>
+  </div>
+  <div class="header-right">
+    <span class="header-total">총 견적: <b id="header-total">0</b></span>
+    <button id="btn-export-html" class="btn-html" type="button">🌐 기관 전달용 양식 저장</button>
+    <button id="btn-print-pdf" class="btn-pdf" type="button">🖨️ PDF 내보내기</button>
+  </div>
+</div>
 
-    <!-- 상단 네비게이션 -->
-    <div class="top-nav h-[56px] bg-slate-900 text-white px-4 flex justify-between items-center shadow-md z-20 relative">
-        <div class="flex items-center gap-3">
-            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-8 filter brightness-0 invert object-contain">
-            <h1 class="text-[15px] font-bold tracking-wide text-blue-300 border-l border-slate-600 pl-3">
-                큐비글로벌 스마트 산출내역서
-            </h1>
+<div class="mobile-tabs no-print" id="mobileTabs">
+  <button id="tabInput" class="active" type="button">데이터 입력</button>
+  <button id="tabPreview" type="button">내역서 보기</button>
+</div>
+
+<div class="main-layout" id="mainLayout">
+  <!-- ===================== 좌측 입력 ===================== -->
+  <div class="panel-input no-print" id="panelInput">
+    <div class="panel-input-scroll">
+      <h2>📋 데이터 입력 &amp; 보관함</h2>
+
+      <div id="warning-panel" class="warning-panel hidden">
+        <div class="warning-title">⚠️ 검수 경고: 확인이 필요한 항목이 있습니다.</div>
+        <ul id="warning-list" class="warning-list"></ul>
+      </div>
+
+      <div class="template-manager">
+        <div class="template-header">
+          <span>💾 견적 양식 보관함</span>
+          <button type="button" class="btn-clear" id="btn-clear-form">입력 초기화 ↺</button>
         </div>
-        <div class="flex items-center gap-3">
-            <span class="text-sm font-bold text-slate-300 mr-2">총 견적: <span id="top-total" class="text-amber-400 text-lg font-black tracking-tight">0</span>원</span>
-            <button onclick="window.print()" class="btn-primary flex items-center gap-1 text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-sm">🖨️ PDF 인쇄 및 내보내기</button>
+        <div class="template-controls">
+          <input type="text" id="preset-search" class="template-search" placeholder="🔍 제목 검색...">
+          <select id="preset-select" class="template-select"><option value="">저장된 양식 선택...</option></select>
         </div>
+        <div class="btn-row">
+          <button type="button" id="btn-load-preset" class="btn-load">불러오기</button>
+          <button type="button" id="btn-save-preset" class="btn-save">현재 상태 저장</button>
+          <button type="button" id="btn-delete-preset" class="btn-delete">삭제</button>
+        </div>
+        <div class="backup-controls">
+          <input type="file" id="import-file" accept=".json" style="display:none;">
+          <button type="button" id="btn-import" class="btn-mini btn-restore">📂 데이터 복구</button>
+          <button type="button" id="btn-export-current" class="btn-mini btn-share">📤 현재 문서 공유(JSON)</button>
+          <button type="button" id="btn-export" class="btn-mini btn-backup" title="저장된 모든 양식을 한 번에 백업합니다.">🗄️ 전체 백업</button>
+        </div>
+      </div>
+
+      <!-- 통화 / 환율 / 글자크기 -->
+      <div class="form-group highlight">
+        <div class="section-title teal">💱 통화 · 환율 · 표시 설정</div>
+        <div class="fs-slider-box">
+          <div class="fs-slider-head">
+            <label>🔍 문서 글자 크기</label>
+            <span class="fs-badge" id="fs-badge">12px</span>
+          </div>
+          <input type="range" id="inp-fontSize" min="10" max="18" step="1" value="12">
+        </div>
+        <label class="form-label">현지 통화 선택 (2그룹 외화 자동 환산)</label>
+        <select id="inp-currency" class="form-select" style="color:#0f766e; border-color:#5eead4;">
+          <option value="USD" data-sym="$" data-name="달러" data-rate="1380">USD · 미국 달러</option>
+          <option value="JPY" data-sym="¥" data-name="엔화" data-rate="9.3">JPY · 일본 엔</option>
+          <option value="CNY" data-sym="¥" data-name="위안" data-rate="195">CNY · 중국 위안</option>
+          <option value="AUD" data-sym="A$" data-name="호주달러" data-rate="920">AUD · 호주 달러</option>
+          <option value="NZD" data-sym="NZ$" data-name="뉴질랜드달러" data-rate="840">NZD · 뉴질랜드 달러</option>
+          <option value="EUR" data-sym="€" data-name="유로" data-rate="1500">EUR · 유로</option>
+        </select>
+        <div class="exrate-row">
+          <label for="inp-exRate">적용 환율 :</label>
+          <input type="text" id="inp-exRate" class="exrate-input amount" value="1,380">
+          <span class="exrate-hint">기준(송금)</span>
+        </div>
+      </div>
+
+      <!-- 1. 기본 정보 -->
+      <div class="form-group">
+        <div class="section-title blue">1. 문서 기본 정보</div>
+        <div class="form-row cols-2">
+          <div><label class="form-label">문서 제목</label><input type="text" id="inp-docTitle" class="form-input" value="가격 산출 내역서" style="font-weight:700;color:#4f46e5;"></div>
+          <div><label class="form-label">고객명 (기관명)</label><input type="text" id="inp-clientName" class="form-input" value="고객명 입력" style="font-weight:700;"></div>
+        </div>
+        <div class="form-row cols-1"><div><label class="form-label">행사명</label><input type="text" id="inp-eventTitle" class="form-input" value="해외 연수 프로그램"></div></div>
+        <div class="form-row cols-2">
+          <div><label class="form-label">여행일자 및 기간</label><input type="text" id="inp-travelDate" class="form-input" value="2026.05.10 ~ 05.15"></div>
+          <div><label class="form-label">여행인원 표기</label><input type="text" id="inp-pax" class="form-input" value="10명"></div>
+        </div>
+        <div class="form-row cols-1">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label class="form-label">발송일자</label>
+              <label style="font-size:11px; cursor:pointer; color:#dc2626; font-weight:700;"><input type="checkbox" id="inp-hl-issue" style="vertical-align:-2px;"> 색상 강조</label>
+            </div>
+            <input type="text" id="inp-issueDate" class="form-input" value="2026.04.10">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 1그룹 (원화) -->
+      <div class="form-group">
+        <div class="section-title indigo">2. 1그룹 비용 (원화 직접 입력)</div>
+        <div class="group-name-row">
+          <span class="gn-icon" style="color:#4f46e5;">✈️ 그룹명</span>
+          <input type="text" id="inp-group1" class="group-name-input" value="항공료" style="color:#4338ca;">
+        </div>
+        <div id="g1-container"></div>
+        <button type="button" class="btn-add-item" id="btn-add-g1">+ 1그룹 항목 추가</button>
+      </div>
+
+      <!-- 3. 2그룹 (외화) -->
+      <div class="form-group">
+        <div class="section-title green">3. 2그룹 현지 비용 (외화 입력 · 자동 환산)</div>
+        <div class="group-name-row">
+          <span class="gn-icon" style="color:#059669;">🌍 그룹명</span>
+          <input type="text" id="inp-group2" class="group-name-input" value="해외 현지 발생비용" style="color:#047857;">
+        </div>
+        <p class="hint-text">※ 외화 단가를 입력하면 설정 환율을 곱해 원화(KRW)가 <strong>자동 계산</strong>됩니다. 카드를 드래그하여 순서를 바꾸고, <strong>💡 강조</strong>로 행을 빨갛게 표시할 수 있습니다.</p>
+        <div id="g2-container"></div>
+        <button type="button" class="btn-add-item" id="btn-add-g2">+ 2그룹 항목 추가</button>
+      </div>
+
+      <!-- 4. 3그룹 (원화) -->
+      <div class="form-group">
+        <div class="section-title orange">4. 3그룹 비용 (원화 직접 입력)</div>
+        <div class="group-name-row">
+          <span class="gn-icon" style="color:#ea580c;">🇰🇷 그룹명</span>
+          <input type="text" id="inp-group3" class="group-name-input" value="국내 발생비용" style="color:#c2410c;">
+        </div>
+        <div id="g3-container"></div>
+        <button type="button" class="btn-add-item" id="btn-add-g3">+ 3그룹 항목 추가</button>
+      </div>
+
+      <!-- 5. 하단 안내문 -->
+      <div class="form-group">
+        <div class="section-title dark">5. 하단 안내문 설정</div>
+        <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom:12px; padding:8px 12px; background:#f0fdfa; border:1px solid #99f6e4; border-radius:6px; font-size:13px; font-weight:700; color:#115e59; cursor:pointer;">
+          <input type="checkbox" id="inp-showTaxNote" checked style="width:16px; height:16px; cursor:pointer; accent-color:#0d9488;">
+          [세금계산서 발행 관련 안내문] 하단에 노출하기
+        </label>
+        <div class="form-row cols-1">
+          <textarea id="inp-taxNote" class="form-input" style="height:90px; font-size:12px;">* 본 위탁용역의 특성상 항공권, 숙박비, 현지교통비 등은 당사가 직접 제공하는 서비스가 아닌, 제 3자와의 거래를 통한 수탁 대행 처리 항목으로 분류됩니다. 따라서, 당사는 전체 계약금액 기준의 세금계산서 발행이 불가하며, 국내 과세 대상 경비 중 알선수수료 등 자체수익에 대해서만 세금계산서를 발행함을 사전 안내드립니다.</textarea>
+        </div>
+        <div class="form-row cols-1" style="margin-top:8px;">
+          <div>
+            <label class="form-label" style="color:#b91c1c;">특이사항 (표 하단 강조 출력 · 비워두면 숨김)</label>
+            <textarea id="inp-specialNote" class="form-input" style="height:56px; font-weight:600; color:#b91c1c;" placeholder="예: 항공료 별도 계약, 수의계약 조건 안내 등"></textarea>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="live-summary-bar no-print"><span class="label">총 견적 금액 (KRW)</span><span class="total-amount" id="live-total">0</span></div>
+  </div>
 
-    <div class="app-container">
-        
-        <!-- ================= [좌측] 입력 패널 ================= -->
-        <div class="input-panel no-print custom-scrollbar">
-            <div class="flex justify-between items-center mb-4 border-b-2 border-slate-900 pb-2">
-                <h2 class="text-lg font-black text-slate-800">📋 데이터 입력</h2>
-                <button onclick="clearForm()" class="text-xs text-slate-500 hover:text-red-500 font-bold border border-slate-300 px-2 py-1 rounded transition hover:bg-red-50">초기화 ↺</button>
-            </div>
-
-            <!-- 데이터 저장 / 불러오기 영역 -->
-            <div class="bg-blue-50/50 p-3 rounded border border-blue-200 mb-5 flex justify-between items-center">
-                <span class="text-[12px] font-extrabold text-blue-800 flex items-center gap-1">💾 데이터 파일 관리</span>
-                <div class="flex gap-2">
-                    <button onclick="document.getElementById('import-file').click()" class="text-[11px] font-bold bg-white border border-teal-500 text-teal-700 px-2 py-1 rounded hover:bg-teal-50 transition shadow-sm">📂 JSON 불러오기</button>
-                    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
-                    <button onclick="exportData()" class="text-[11px] font-bold bg-white border border-indigo-500 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-50 transition shadow-sm">⬇️ JSON 다운로드</button>
-                </div>
-            </div>
-            
-            <!-- 1. 기본 정보 -->
-            <div class="form-section">
-                <div class="section-title">1. 문서 기본 정보</div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="col-span-2">
-                        <div class="bg-teal-50/50 p-3 rounded-lg border border-teal-200 shadow-sm">
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="input-label !text-teal-800 !mb-0 flex items-center gap-1">🔍 문서 글자 크기</label>
-                                <span id="font-size-cost-display" class="text-[11px] font-black text-white bg-teal-600 px-2 py-0.5 rounded shadow-sm">12px (기본)</span>
-                            </div>
-                            <input type="range" id="inp-font-size-cost" min="10" max="18" step="1" value="12" oninput="changeCostFontSize()">
-                        </div>
-                    </div>
-
-                    <div class="col-span-2">
-                        <label class="input-label">문서 제목</label>
-                        <input type="text" id="inp-cost-title" class="input-field font-bold text-indigo-700 bg-indigo-50/30" value="가격 산출 내역서" oninput="renderApp()">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="input-label">고객명 (기관명)</label>
-                        <input type="text" id="inp-client-name" class="input-field font-bold text-slate-900" value="고객명 입력" oninput="renderApp()">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="input-label">행사명</label>
-                        <input type="text" id="inp-event-title" class="input-field" value="해외 연수 프로그램" oninput="renderApp()">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="input-label">여행일자 및 기간</label>
-                        <input type="text" id="inp-date" class="input-field" value="2026.05.10 ~ 05.15" oninput="renderApp()">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="input-label">여행인원 표기</label>
-                        <input type="text" id="inp-pax" class="input-field" value="10명" oninput="renderApp()">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="input-label">발송일자</label>
-                        <input type="text" id="inp-issue" class="input-field" value="2026.04.10" oninput="renderApp()">
-                    </div>
-
-                    <!-- 환율 설정 영역 -->
-                    <div class="col-span-2 mt-2 pt-3 border-t border-slate-200">
-                        <h4 class="text-xs font-bold text-rose-700 mb-2 flex items-center gap-1">💱 외화 및 환율 설정 (현지 비용 계산용)</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="input-label">통화 선택</label>
-                                <select id="inp-currency" class="input-field font-bold text-blue-900" onchange="handleCurrencyChange()">
-                                    <option value="USD" data-sym="$" data-name="달러">USD (미국 달러)</option>
-                                    <option value="JPY" data-sym="¥" data-name="엔">JPY (일본 엔)</option>
-                                    <option value="CNY" data-sym="¥" data-name="위안">CNY (중국 위안)</option>
-                                    <option value="AUD" data-sym="A$" data-name="호주달러">AUD (호주 달러)</option>
-                                    <option value="NZD" data-sym="NZ$" data-name="뉴질랜드달러">NZD (뉴질랜드 달러)</option>
-                                    <option value="EUR" data-sym="€" data-name="유로" selected>EUR (유로)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="input-label">적용 환율 (송금기준)</label>
-                                <input type="number" id="inp-exrate" class="input-field font-bold text-right text-rose-700 bg-rose-50" value="1500" step="0.01" oninput="renderApp()">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. 산출내역 -->
-            <div class="form-section">
-                <div class="section-title">2. 비용 산출 내역</div>
-                
-                <!-- (1) 항공료 (원화입력) -->
-                <div class="mb-5">
-                    <div class="flex items-center gap-2 mb-2 border-b border-indigo-200 pb-1">
-                        <span class="text-[13px] font-bold text-indigo-800 shrink-0">✈️ (1) 그룹명:</span>
-                        <input type="text" id="inp-group-1" class="text-[13px] font-bold text-indigo-900 bg-indigo-50 border border-indigo-200 rounded px-2 py-0.5 outline-none flex-1" value="항공료" oninput="renderApp()">
-                    </div>
-                    <div id="cost-g1-list"></div>
-                    <button onclick="addCost('g1')" class="w-full text-[11px] bg-indigo-50 border border-dashed border-indigo-300 text-indigo-600 py-2 rounded font-bold hover:bg-indigo-100 transition shadow-sm">+ 1그룹 항목 추가 (원화 직접 입력)</button>
-                </div>
-
-                <!-- (2) 해외현지비용 (외화입력 -> 환율자동계산) -->
-                <div class="mb-5">
-                    <div class="flex items-center gap-2 mb-2 border-b border-green-200 pb-1">
-                        <span class="text-[13px] font-bold text-green-800 shrink-0">🌍 (2) 그룹명:</span>
-                        <input type="text" id="inp-group-2" class="text-[13px] font-bold text-green-900 bg-green-50 border border-green-200 rounded px-2 py-0.5 outline-none flex-1" value="해외현지 발생비용" oninput="renderApp()">
-                    </div>
-                    <p class="text-[11px] text-green-700 mb-2 bg-green-50 p-1.5 rounded font-medium">※ 외화 단위로 입력하면, 설정된 환율을 곱해 원화(KRW)가 <b>자동 계산</b>됩니다.</p>
-                    <div id="cost-g2-list"></div>
-                    <button onclick="addCost('g2')" class="w-full text-[11px] bg-green-50 border border-dashed border-green-300 text-green-600 py-2 rounded font-bold hover:bg-green-100 transition shadow-sm">+ 2그룹 항목 추가 (외화 단가 입력)</button>
-                </div>
-
-                <!-- (3) 국내비용 (원화입력) -->
-                <div>
-                    <div class="flex items-center gap-2 mb-2 border-b border-orange-200 pb-1">
-                        <span class="text-[13px] font-bold text-orange-800 shrink-0">🇰🇷 (3) 그룹명:</span>
-                        <input type="text" id="inp-group-3" class="text-[13px] font-bold text-orange-900 bg-orange-50 border border-orange-200 rounded px-2 py-0.5 outline-none flex-1" value="국내 비용" oninput="renderApp()">
-                    </div>
-                    <div id="cost-g3-list"></div>
-                    <button onclick="addCost('g3')" class="w-full text-[11px] bg-orange-50 border border-dashed border-orange-300 text-orange-600 py-2 rounded font-bold hover:bg-orange-100 transition shadow-sm">+ 3그룹 항목 추가 (원화 직접 입력)</button>
-                </div>
-            </div>
-
-            <!-- 3. 하단 안내문 -->
-            <div class="form-section">
-                <div class="section-title">3. 하단 안내문 설정</div>
-                <div>
-                    <label class="input-label text-slate-600">세금계산서 및 기타 안내문 (비워두면 숨김)</label>
-                    <textarea id="inp-tax-notice" class="input-field text-[12px] text-slate-700" oninput="renderApp()">* 본 위탁용역의 특성상 항공권, 숙박비, 현지교통비 등은 당사가 직접 제공하는 서비스가 아닌, 제 3자와의 거래를 통한 수탁 대행 처리 항목으로 분류됩니다. 따라서, 당사는 전체 계약금액 기준의 세금계산서 발행이 불가하며, 국내 과세 대상 경비 중 알선수수료 등 자체수익에 대해서만 세금계산서를 발행함을 사전 안내드립니다.</textarea>
-                </div>
-            </div>
-            
+  <!-- ===================== 우측 미리보기 ===================== -->
+  <div class="panel-preview" id="panelPreview">
+    <div class="a4-sheet" id="print-section">
+      <div class="doc-header">
+        <div class="doc-header-left">
+          <table class="info-table">
+            <tr><th>고객명</th><td id="out-clientName" class="export-text" style="font-weight:800;"></td></tr>
+            <tr><th>행사명</th><td id="out-eventTitle" class="export-text" style="font-weight:700;"></td></tr>
+            <tr><th>여행일</th><td id="out-travelDate" class="export-text"></td></tr>
+            <tr><th>여행인원</th><td id="out-pax" class="export-text"></td></tr>
+            <tr><th>발송/환율</th><td id="out-issueAndRate" class="export-text" style="font-size:11px;"></td></tr>
+          </table>
         </div>
-
-        <!-- ================= [우측] 미리보기 패널 (A4 출력본) ================= -->
-        <div class="preview-panel" id="preview-panel">
-            
-            <div class="a4-sheet" id="page-cost">
-                
-                <!-- 상단 헤더 (큐비글로벌 스타일) -->
-                <div class="flex justify-between items-start mb-6 border-b-[3px] border-slate-900 pb-4">
-                    <div class="w-[55%]">
-                        <table class="w-full text-left !border-none">
-                            <tbody>
-                                <tr>
-                                    <th class="w-[25%] !bg-slate-100 !text-slate-800 !py-1.5 !text-[13px] print:!bg-gray-100">고객명</th>
-                                    <td class="!border-none !py-1.5 !font-bold !text-[13px] text-slate-900" id="out-client-name"></td>
-                                </tr>
-                                <tr>
-                                    <th class="!bg-slate-100 !text-slate-800 !py-1.5 !text-[13px] print:!bg-gray-100">행사명</th>
-                                    <td class="!border-none !py-1.5 !font-bold !text-[13px] text-slate-800" id="out-event-title"></td>
-                                </tr>
-                                <tr>
-                                    <th class="!bg-slate-100 !text-slate-800 !py-1.5 !text-[13px] print:!bg-gray-100">여행일</th>
-                                    <td class="!border-none !py-1.5 !text-[13px]" id="out-date"></td>
-                                </tr>
-                                <tr>
-                                    <th class="!bg-slate-100 !text-slate-800 !py-1.5 !text-[13px] print:!bg-gray-100">여행인원</th>
-                                    <td class="!border-none !py-1.5 !text-[13px]" id="out-pax"></td>
-                                </tr>
-                                <tr>
-                                    <th class="!bg-slate-100 !text-slate-800 !py-1.5 !text-[13px] print:!bg-gray-100">발송/환율</th>
-                                    <td class="!border-none !py-1.5 !text-[12px] !font-medium text-blue-800 print:text-black" id="out-issue"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="w-[40%] flex flex-col justify-between items-end h-[120px]">
-                        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjPMO83G1xHJIu1jKvn1GjQn_C3z42tM-LYvYPKcGIaYkarv47vw5TlYsJFjZxRLVm4e0yQutvIHXQ_VBUHdlu2p25QP7z1NAK2XsEUNUpxycDMpLzi7TJ390gXDpD5orf1OBAXwbwnPrasas06glRIv9rpqwN1YEQvy2fPbKRU4Ogpbo8SyH7NEnt-1FY=w320-h101" alt="QB GLOBAL" class="h-[45px] object-contain">
-                        <div class="text-center mt-auto mb-2">
-                            <h2 id="out-cost-title" class="text-[26px] font-black text-slate-900 tracking-widest leading-none">가격 산출 내역서</h2>
-                            <p class="text-[10px] text-slate-500 font-bold tracking-[0.25em] mt-1 uppercase print:text-gray-500">Calculation Details</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 메인 산출내역 테이블 -->
-                <div class="flex-grow flex flex-col">
-                    <table class="cost-table flex-grow" id="main-table">
-                        <colgroup>
-                            <col width="9%">  <!-- 구분 -->
-                            <col width="15%"> <!-- 항목 -->
-                            <col width="20%"> <!-- 내용 -->
-                            <col width="6%">  <!-- 수량 -->
-                            <col width="12%" id="col-fgn"> <!-- 외화단가 -->
-                            <col width="14%"> <!-- 원화단가 -->
-                            <col width="14%"> <!-- 총금액 -->
-                            <col width="10%"> <!-- 비고 -->
-                        </colgroup>
-                        <thead>
-                            <tr class="bg-slate-100 border-b-2 border-slate-800 print:bg-gray-200">
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">구분</th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">항목</th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">내용</th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">수량</th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight" id="th-fgn-price">외화단가</th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">원화단가<br><span class="font-normal text-[10px]">KRW</span></th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">총금액<br><span class="font-normal text-[10px]">KRW</span></th>
-                                <th class="py-2 text-slate-800 font-extrabold leading-tight">비고</th>
-                            </tr>
-                        </thead>
-                        <!-- JS 렌더링으로 여러개의 <tbody>가 주입됩니다. (인쇄 오류 방지) -->
-                    </table>
-                </div>
-                
-                <!-- 하단 안내문 -->
-                <div id="out-tax-notice-container" class="mt-4 pt-2">
-                    <p class="text-[12px] font-bold text-slate-800 mb-1 print:text-black">1. 세금계산서 발행 및 안내사항</p>
-                    <p class="text-[11px] text-slate-600 leading-relaxed text-justify break-keep print:text-gray-800" id="out-tax-notice-text"></p>
-                </div>
-                
-                <!-- 투어메이커 워터마크 -->
-                <div class="mt-8 text-center border-t border-slate-300 pt-4 calc-powered">
-                    <p class="text-[11px] text-slate-500 font-medium tracking-tight print:text-gray-600">
-                        [System Powered by TOURMAKER] 본 산출 내역서는 <strong>큐비글로벌</strong>의 기획과 투어메이커의 트래블 테크 기술 제휴로 제작되었습니다.
-                    </p>
-                </div>
-
-            </div>
+        <div class="doc-header-right">
+          <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjPMO83G1xHJIu1jKvn1GjQn_C3z42tM-LYvYPKcGIaYkarv47vw5TlYsJFjZxRLVm4e0yQutvIHXQ_VBUHdlu2p25QP7z1NAK2XsEUNUpxycDMpLzi7TJ390gXDpD5orf1OBAXwbwnPrasas06glRIv9rpqwN1YEQvy2fPbKRU4Ogpbo8SyH7NEnt-1FY=w320-h101" alt="QB GLOBAL">
+          <div class="doc-title-area">
+            <h2 id="out-docTitle">가격 산출 내역서</h2>
+            <p>Calculation Details</p>
+          </div>
         </div>
+      </div>
+
+      <div id="table-area">
+        <table class="main-table" id="main-table">
+          <thead id="main-thead"></thead>
+          <tbody id="tbody-g1"></tbody>
+          <tbody id="tbody-g2"></tbody>
+          <tbody id="tbody-g3"></tbody>
+          <tbody id="tbody-total"></tbody>
+        </table>
+      </div>
+
+      <div id="footer-area">
+        <div class="footer-notes" id="out-taxNoteArea">
+          <p class="title">1. 세금계산서 발행 및 안내사항</p>
+          <p class="body" id="out-taxNoteText"></p>
+        </div>
+      </div>
+
+      <div class="footer-brand">
+        <p>[System Powered by TOURMAKER] 본 산출 내역서는 <strong style="color:#0f766e;">큐비글로벌</strong>의 기획과 투어메이커의 트래블 테크 기술 제휴로 제작되었습니다.</p>
+        <a href="https://tourmaker.kr" target="_blank" rel="noopener noreferrer" class="no-print">투어메이커 홈페이지 바로가기</a>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- ================= 자바스크립트 ================= -->
-    <script>
-        const unFmt = str => {
-            if (!str) return 0;
-            const parsed = parseFloat(String(str).replace(/,/g, ''));
-            return isNaN(parsed) ? 0 : parsed;
-        };
-        const fmt = n => (n === 0 || n === '' || isNaN(n)) ? '' : Number(n).toLocaleString(undefined, {maximumFractionDigits: 2});
-        const fmtTotal = n => Number(Math.round(n || 0)).toLocaleString();
-        const esc = str => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+<script>
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const state = { warningTimer: null };
 
-        // State Data
-        let costs = {
-            g1: [
-                { name: "항공료", desc: "왕복 항공권", qty: 10, fgn: 0, krw: 598500, note: "예상가" }
-            ],
-            g2: [
-                { name: "해외현지 발생비용", desc: "숙박, 차량, 식사 등 지상비 일체", qty: 10, fgn: 250, krw: 0, note: "" }
-            ],
-            g3: [
-                { name: "여행자보험", desc: "해외여행자보험 1억원", qty: 10, fgn: 0, krw: 20000, note: "주민번호 필요" },
-                { name: "진행수수료", desc: "운영 및 기획 관리비", qty: 1, fgn: 0, krw: 1500000, note: "" }
-            ]
-        };
+  const initG1 = [
+    { name: '항공료', desc: '왕복 항공권', qty: 10, krw: 598500, note: '예상가', hl: false }
+  ];
+  const initG2 = [
+    { name: '호텔', desc: '(2인1실) 4박', qty: 5, fgn: 320, note: '조식 포함', hl: false },
+    { name: '차량비', desc: '전용 차량 1대', qty: 1, fgn: 1200, note: '통행료 포함', hl: false },
+    { name: '식비', desc: '중식 5회', qty: 10, fgn: 25, note: '현지식', hl: false },
+    { name: '가이드', desc: '전일정 동행', qty: 1, fgn: 800, note: '한국어 가이드', hl: false }
+  ];
+  const initG3 = [
+    { name: '여행자보험', desc: '해외여행자보험 1억원', qty: 10, krw: 20000, note: '주민번호 필요', hl: false },
+    { name: '진행수수료', desc: '운영 및 기획 관리비', qty: 1, krw: 1500000, note: '', hl: false }
+  ];
 
-        // ================= JSON 데이터 추출 및 렌더링 영역 =================
-        function getFormData() {
-            return {
-                costFontSize: document.getElementById('inp-font-size-cost').value,
-                costTitle: document.getElementById('inp-cost-title').value,
-                clientName: document.getElementById('inp-client-name').value,
-                eventTitle: document.getElementById('inp-event-title').value,
-                date: document.getElementById('inp-date').value,
-                pax: document.getElementById('inp-pax').value,
-                issue: document.getElementById('inp-issue').value,
-                currency: document.getElementById('inp-currency').value,
-                exRate: document.getElementById('inp-exrate').value,
-                group1: document.getElementById('inp-group-1').value,
-                group2: document.getElementById('inp-group-2').value,
-                group3: document.getElementById('inp-group-3').value,
-                taxNotice: document.getElementById('inp-tax-notice').value,
-                costs: JSON.parse(JSON.stringify(costs)) // 깊은 복사로 상태 저장
-            };
+  function escAttr(str='') { return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function parseNum(str) { const v = String(str ?? '').replace(/,/g,'').trim(); if (v === '' || v === '-') return 0; return Number(v) || 0; }
+  function fmt(n) { return (n === 0 || n === '' || n == null) ? '' : Number(n).toLocaleString('ko-KR', { maximumFractionDigits: 2 }); }
+  function fmtT(n) { return Number(Math.round(n || 0)).toLocaleString('ko-KR'); }
+  function formatAmountInput(val) {
+    const str = String(val ?? '');
+    const neg = str.trim().startsWith('-');
+    const s = str.replace(/[^0-9.]/g, '');
+    if (!s) return neg ? '-' : '';
+    const parts = s.split('.');
+    parts[0] = Number(parts[0] || 0).toLocaleString('ko-KR');
+    return (neg ? '-' : '') + parts.join('.');
+  }
+  function currencyMeta() {
+    const opt = $('#inp-currency').options[$('#inp-currency').selectedIndex];
+    return { code: $('#inp-currency').value, sym: opt.getAttribute('data-sym'), name: opt.getAttribute('data-name'), rate: Number(opt.getAttribute('data-rate')) };
+  }
+  function sanitizeName(name) { return String(name || '').replace(/[\\/:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function getAutoFileName() {
+    let dep = $('#inp-travelDate').value.split('~')[0].replace(/[^0-9]/g, '');
+    if (dep.length >= 8) dep = dep.slice(2, 8); else if (dep.length > 6) dep = dep.slice(0, 6);
+    if (!dep) dep = '날짜미상';
+    const title = sanitizeName($('#inp-clientName').value || $('#inp-eventTitle').value) || '큐비글로벌견적';
+    let issue = $('#inp-issueDate').value.replace(/[^0-9]/g, '');
+    issue = issue.length >= 8 ? issue.slice(4, 8) : issue;
+    if (!issue) issue = '작성일미상';
+    return `${dep}_${title}_${issue}`;
+  }
+
+  /* ============ 입력 카드 ============ */
+  function createCard(type, data={}) {
+    const isFgn = (type === 'g2');
+    const amountVal = isFgn ? fmt(data.fgn) : fmt(data.krw);
+    const amountCls = isFgn ? 'fgn' : 'amount';
+    const amountPh = isFgn ? '외화단가' : '원화단가(₩)';
+    const hlActive = data.hl ? 'active' : '';
+    return `<div class="slot-card ${type}-item" draggable="true" data-hl="${data.hl ? 'true' : 'false'}">
+      <div class="slot-card-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="drag-handle" title="드래그하여 순서 변경">⠿ 순서 이동</span>
+          <button type="button" class="btn-toggle-hl js-toggle-hl ${hlActive}" title="이 항목 강조">💡 강조</button>
+        </div>
+        <button type="button" class="btn-delete-row js-delete-row" title="항목 삭제">✕</button>
+      </div>
+      <div class="slot-grid">
+        <input type="text" class="slot-input c-name" value="${escAttr(data.name || '')}" placeholder="항목명">
+        <input type="text" class="slot-input c-desc" value="${escAttr(data.desc || '')}" placeholder="세부내용">
+        <input type="number" class="slot-input c-qty" style="text-align:center" value="${escAttr(data.qty ?? '')}" placeholder="수량">
+        <input type="text" class="slot-input ${amountCls} c-amount" value="${escAttr(amountVal)}" placeholder="${amountPh}">
+      </div>
+      <input type="text" class="slot-input c-note" style="width:100%; background:#fff;" value="${escAttr(data.note || '')}" placeholder="📝 비고">
+    </div>`;
+  }
+  function addRow(type, data={}, skip=false) {
+    $(`#${type}-container`).insertAdjacentHTML('beforeend', createCard(type, data));
+    if (!skip) { render(); scheduleValidation(); }
+  }
+  function getRowData(type) {
+    return $$(`#${type}-container .slot-card`).map(el => {
+      const o = {
+        name: $('.c-name', el)?.value || '',
+        desc: $('.c-desc', el)?.value || '',
+        qty: $('.c-qty', el)?.value || '',
+        note: $('.c-note', el)?.value || '',
+        hl: el.dataset.hl === 'true'
+      };
+      if (type === 'g2') o.fgn = parseNum($('.c-amount', el)?.value); else o.krw = parseNum($('.c-amount', el)?.value);
+      return o;
+    });
+  }
+  function buildInitialInputs() {
+    ['g1','g2','g3'].forEach(t => $(`#${t}-container`).innerHTML = '');
+    initG1.forEach(d => addRow('g1', d, true));
+    initG2.forEach(d => addRow('g2', d, true));
+    initG3.forEach(d => addRow('g3', d, true));
+  }
+
+  /* ============ 통화/환율 UI ============ */
+  function handleCurrencyChange() {
+    const m = currencyMeta();
+    $('#inp-exRate').value = formatAmountInput(String(m.rate));
+    render(); scheduleValidation();
+  }
+  function updateFontSize() {
+    const v = $('#inp-fontSize').value;
+    $('#fs-badge').textContent = v + 'px' + (v === '12' ? ' (기본)' : '');
+    document.documentElement.style.setProperty('--cost-fs', v + 'px');
+  }
+
+  /* ============ 검수 ============ */
+  function extractBasePax() {
+    const s = ($('#inp-pax').value || '').replace(/\s/g, '');
+    const tot = s.match(/총?(\d+)명/); if (tot) return Number(tot[1]);
+    const sp = s.match(/(\d+)[^0-9]+(\d+)/); if (sp) return Number(sp[1]) + Number(sp[2]);
+    const n = s.match(/(\d+)/); return n ? Number(n[1]) : null;
+  }
+  function validateRows() {
+    const warnings = [];
+    $$('.error-border').forEach(el => el.classList.remove('error-border'));
+    $$('.error-row-container').forEach(el => el.classList.remove('error-row-container'));
+    const m = currencyMeta(); const exRate = parseNum($('#inp-exRate').value);
+    const ranges = { JPY:[5,20], USD:[1000,2000], CNY:[100,400], AUD:[700,1300], NZD:[600,1200], EUR:[1200,1800] };
+    if (ranges[m.code]) {
+      const [mn, mx] = ranges[m.code];
+      if (exRate < mn || exRate > mx) { warnings.push({ msg:`환율 경고: ${m.code} 환율(${exRate})이 일반적인 범위를 벗어났습니다.`, targetId:null }); $('#inp-exRate').classList.add('error-border'); }
+    }
+    const basePax = extractBasePax();
+    const paxSensitive = name => ['식비','입장료','관광지입장료','여행자보험','항공료'].some(k => name.includes(k)) || ['중식','석식','조식','입장'].some(k => name.includes(k));
+    let idx = 0;
+    ['g1','g2','g3'].forEach(type => {
+      $$(`#${type}-container .slot-card`).forEach(el => {
+        const rowId = `row-${type}-${idx++}`; el.id = rowId; let err = false;
+        const nameEl = $('.c-name', el), qtyEl = $('.c-qty', el), amtEl = $('.c-amount', el);
+        const name = nameEl.value.trim(), qtyStr = qtyEl.value.trim(), amtStr = amtEl.value.trim();
+        const qty = Number(qtyStr) || 0, amt = parseNum(amtStr);
+        const filled = name || $('.c-desc', el).value.trim() || qtyStr || amtStr || $('.c-note', el).value.trim();
+        if (!filled) return;
+        if (!name) { warnings.push({ msg:`[${rowId} 줄] 항목명이 누락되었습니다.`, targetId:rowId }); nameEl.classList.add('error-border'); err = true; }
+        if (name) {
+          if (qtyStr !== '' && amtStr === '') { warnings.push({ msg:`[${name}] 단가가 누락되었습니다.`, targetId:rowId }); amtEl.classList.add('error-border'); err = true; }
+          if (qtyStr === '' && amtStr !== '') { warnings.push({ msg:`[${name}] 수량이 누락되었습니다.`, targetId:rowId }); qtyEl.classList.add('error-border'); err = true; }
+          if (qtyStr !== '' && qty === 0) { warnings.push({ msg:`[${name}] 수량이 0입니다.`, targetId:rowId }); err = true; }
+          if (amtStr !== '' && amt === 0) { warnings.push({ msg:`[${name}] 단가가 0입니다.`, targetId:rowId }); err = true; }
+          if (basePax && qtyStr !== '' && paxSensitive(name) && qty > 0 && qty !== basePax) { warnings.push({ msg:`[${name}] 수량 경고: 입력 수량(${qty})이 기준 인원(${basePax}명)과 다릅니다.`, targetId:rowId }); qtyEl.classList.add('error-border'); err = true; }
         }
+        if (err) el.classList.add('error-row-container');
+      });
+    });
+    return warnings;
+  }
+  function renderWarnings() {
+    const w = validateRows(); const panel = $('#warning-panel'); const list = $('#warning-list');
+    if (w.length) { panel.classList.remove('hidden'); list.innerHTML = w.map(x => `<li data-row="${escAttr(x.targetId || '')}">${x.msg}</li>`).join(''); }
+    else { panel.classList.add('hidden'); list.innerHTML = ''; }
+    return w;
+  }
+  function scheduleValidation() { clearTimeout(state.warningTimer); state.warningTimer = setTimeout(renderWarnings, 300); }
+  function scrollToRow(id) {
+    const el = document.getElementById(id); if (!el) return;
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+    const orig = el.style.backgroundColor; el.style.backgroundColor = '#fecaca';
+    setTimeout(() => { el.style.backgroundColor = orig; }, 800);
+  }
 
-        function setFormData(data) {
-            if(!data) return;
-            if(data.costFontSize) { document.getElementById('inp-font-size-cost').value = data.costFontSize; changeCostFontSize(); }
-            if(data.costTitle !== undefined) document.getElementById('inp-cost-title').value = data.costTitle;
-            if(data.clientName !== undefined) document.getElementById('inp-client-name').value = data.clientName;
-            if(data.eventTitle !== undefined) document.getElementById('inp-event-title').value = data.eventTitle;
-            if(data.date !== undefined) document.getElementById('inp-date').value = data.date;
-            if(data.pax !== undefined) document.getElementById('inp-pax').value = data.pax;
-            if(data.issue !== undefined) document.getElementById('inp-issue').value = data.issue;
-            if(data.currency !== undefined) document.getElementById('inp-currency').value = data.currency;
-            if(data.exRate !== undefined) document.getElementById('inp-exrate').value = data.exRate;
-            if(data.group1 !== undefined) document.getElementById('inp-group-1').value = data.group1;
-            if(data.group2 !== undefined) document.getElementById('inp-group-2').value = data.group2;
-            if(data.group3 !== undefined) document.getElementById('inp-group-3').value = data.group3;
-            if(data.taxNotice !== undefined) document.getElementById('inp-tax-notice').value = data.taxNotice;
-            
-            if(data.costs) costs = JSON.parse(JSON.stringify(data.costs));
+  /* ============ rowspan helper ============ */
+  function rs(arr, i, key) { let r = 1; for (let j=i+1; j<arr.length; j++) { if (arr[j][key] === arr[i][key]) r++; else break; } return r; }
+  function rs2(arr, i) { let r = 1; for (let j=i+1; j<arr.length; j++) { if (arr[j].name === arr[i].name && arr[j].desc === arr[i].desc) r++; else break; } return r; }
 
-            renderInputs();
-            renderApp();
-        }
+  /* ============ 렌더링 ============ */
+  function renderGroupBody(rows, groupName, isFgn, exRate, m) {
+    const data = rows.filter(r => r.name.trim()).map(r => {
+      const qty = Number(r.qty) || 0;
+      const krw = isFgn ? Math.round((Number(r.fgn) || 0) * exRate) : (Number(r.krw) || 0);
+      return { ...r, qty, krw, fgn: Number(r.fgn) || 0, tot: qty * krw };
+    });
+    const sum = data.reduce((s, r) => s + r.tot, 0);
+    let h = '';
+    if (!data.length) {
+      h += `<tr><td class="text-center font-bold bg-gray-50 export-text">${escAttr(groupName)}</td><td colspan="7" class="text-center" style="color:#94a3b8;">입력된 항목이 없습니다.</td></tr>`;
+    } else {
+      for (let i=0; i<data.length; i++) {
+        const hc = data[i].hl ? ' hl-text' : '';
+        h += '<tr>';
+        if (i === 0) h += `<td rowspan="${data.length}" class="text-center font-bold bg-gray-50 export-text">${escAttr(groupName)}</td>`;
+        if (i === 0 || data[i].name !== data[i-1].name) h += `<td rowspan="${rs(data, i, 'name')}" class="text-center font-bold export-text${hc}">${escAttr(data[i].name)}</td>`;
+        if (i === 0 || data[i].name !== data[i-1].name || data[i].desc !== data[i-1].desc) h += `<td rowspan="${rs2(data, i)}" class="text-left export-text${hc}">${escAttr(data[i].desc)}</td>`;
+        h += `<td class="text-center export-qty${hc}" data-group="${isFgn ? 'g2' : 'k'}">${fmt(data[i].qty)}</td>`;
+        if (isFgn) h += `<td class="text-right bg-fgn${hc}"><span class="fgn-sym">${m.sym}</span><span class="export-fgn font-bold" style="color:#047857;">${fmt(data[i].fgn)}</span></td>`;
+        else h += `<td class="text-center bg-gray-50" style="color:#cbd5e1;">-</td>`;
+        h += `<td class="text-right export-krw${hc}" data-group="${isFgn ? 'g2' : 'k'}">${fmt(data[i].krw)}</td>`;
+        h += `<td class="text-right font-black export-tot${hc}" data-group="any">${fmtT(data[i].tot)}</td>`;
+        h += `<td class="text-center export-text${hc}" style="color:#64748b;">${escAttr(data[i].note || '')}</td></tr>`;
+      }
+    }
+    h += `<tr class="subtotal-row"><td colspan="6" class="text-center">소계 — ${escAttr(groupName)}</td><td class="text-right">₩${fmtT(sum)}</td><td></td></tr>`;
+    return { html: h, sum };
+  }
 
-        function exportData() {
-            const data = getFormData();
-            const jsonStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            const clientTitle = document.getElementById('inp-client-name').value || '새_견적';
-            a.download = `큐비글로벌_견적데이터_${clientTitle.replace(/\s+/g, '_')}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+  function render() {
+    const m = currencyMeta(); const exRate = parseNum($('#inp-exRate').value) || 0;
+    const g1n = $('#inp-group1').value || '1그룹', g2n = $('#inp-group2').value || '2그룹', g3n = $('#inp-group3').value || '3그룹';
 
-        function importData(e) {
-            const file = e.target.files[0];
-            if(!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    setFormData(json);
-                    alert('데이터를 성공적으로 불러왔습니다.');
-                } catch(err) {
-                    alert('파일을 읽는 중 오류가 발생했습니다. 올바른 JSON 파일인지 확인해주세요.');
-                    console.error(err);
-                }
-            };
-            reader.readAsText(file);
-            e.target.value = ''; // 동일 파일 재업로드 버그 방지
-        }
-        // =============================================================
+    $('#out-docTitle').textContent = $('#inp-docTitle').value;
+    $('#out-clientName').textContent = $('#inp-clientName').value;
+    $('#out-eventTitle').textContent = $('#inp-eventTitle').value;
+    $('#out-travelDate').textContent = $('#inp-travelDate').value;
+    $('#out-pax').textContent = $('#inp-pax').value;
+    $('#out-issueAndRate').textContent = `${$('#inp-issueDate').value} / ${m.code} ${exRate.toLocaleString('ko-KR')} 기준(송금)`;
+    $('#out-issueAndRate').className = $('#inp-hl-issue').checked ? 'export-text hl-text' : 'export-text';
 
-        function changeCostFontSize() {
-            const size = document.getElementById('inp-font-size-cost').value;
-            let displayTxt = size + 'px';
-            if (size == 12) displayTxt += ' (기본)';
-            
-            document.getElementById('font-size-cost-display').innerText = displayTxt;
-            document.documentElement.style.setProperty('--cost-fs', size + 'px');
-        }
+    $('#main-thead').innerHTML = `<tr>
+      <th style="width:9%">구분</th>
+      <th style="width:13%">항목</th>
+      <th style="width:19%">내용</th>
+      <th style="width:8%">수량</th>
+      <th style="width:13%; background:#f0fdfa; color:#0f766e;">${m.name} 단가<br><span style="font-weight:400;font-size:.85em;color:#64748b;">${m.code}</span></th>
+      <th style="width:13%">원화 단가<br><span style="font-weight:400;font-size:.85em;">KRW</span></th>
+      <th style="width:14%">총금액<br><span style="font-weight:400;font-size:.85em;">KRW</span></th>
+      <th style="width:11%">비고</th>
+    </tr>`;
 
-        // 인라인 에디터용 줄바꿈 처리
-        function handleEditKeydown(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.execCommand('insertText', false, '\n');
-            }
-        }
+    const r1 = renderGroupBody(getRowData('g1'), g1n, false, exRate, m);
+    const r2 = renderGroupBody(getRowData('g2'), g2n, true, exRate, m);
+    const r3 = renderGroupBody(getRowData('g3'), g3n, false, exRate, m);
+    $('#tbody-g1').innerHTML = r1.html;
+    $('#tbody-g2').innerHTML = r2.html;
+    $('#tbody-g3').innerHTML = r3.html;
 
-        function handleCurrencyChange() {
-            const sel = document.getElementById('inp-currency');
-            const code = sel.value;
-            const rates = { 'USD': 1350, 'JPY': 9.2, 'CNY': 190, 'AUD': 900, 'NZD': 820, 'EUR': 1500 };
-            document.getElementById('inp-exrate').value = rates[code] || 1000;
-            renderApp();
-        }
+    const grand = r1.sum + r2.sum + r3.sum;
+    const noFlight = r2.sum + r3.sum;
+    const special = escAttr($('#inp-specialNote').value.trim());
+    let totalHtml = `<tr class="grand-row"><td colspan="6" class="text-center grand-label" style="font-weight:900; letter-spacing:.15em; color:#1d4ed8;">전 체 합 계 금 액</td><td colspan="2" class="text-right grand-amount" style="color:#1d4ed8;">₩${fmtT(grand)}</td></tr>`;
+    if (r1.sum > 0 && noFlight > 0) {
+      totalHtml += `<tr class="grand-row ${special ? '' : 'grand-row-last'}"><td colspan="6" class="text-center grand-label">${escAttr(g2n)} + ${escAttr(g3n)} 합계 <span style="font-size:.85em;font-weight:400;color:#64748b;">(${escAttr(g1n)} 제외)</span></td><td colspan="2" class="text-right grand-amount" style="font-size:calc(var(--cost-fs)*1.1);">₩${fmtT(noFlight)}</td></tr>`;
+    }
+    if (special) {
+      totalHtml += `<tr class="grand-row grand-row-last"><td class="text-center font-bold bg-fgn export-text" style="color:#b91c1c;">특이사항</td><td colspan="7" style="font-weight:700; color:#b91c1c; padding:10px; line-height:1.5; text-align:left;" class="export-text">${special.replace(/\n/g,'<br>')}</td></tr>`;
+    }
+    $('#tbody-total').innerHTML = totalHtml;
 
-        function handleNumInput(el, type, i, key) {
-            let val = el.value.replace(/[^0-9.]/g, ''); 
-            const parts = val.split('.');
-            if(parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+    const taxText = $('#inp-taxNote').value.trim();
+    $('#out-taxNoteArea').style.display = ($('#inp-showTaxNote').checked && taxText) ? 'block' : 'none';
+    $('#out-taxNoteText').innerHTML = escAttr(taxText).replace(/\n/g, '<br>');
 
-            el.value = val;
-            costs[type][i][key] = val ? parseFloat(val) : 0;
-            renderApp();
-        }
+    $('#live-total').textContent = `₩ ${fmtT(grand)}`;
+    $('#header-total').textContent = `${fmtT(grand)}원`;
+    document.title = getAutoFileName();
+  }
 
-        // 좌측 입력 폼 렌더링
-        function renderInputs() {
-            const currencySym = document.getElementById('inp-currency').options[document.getElementById('inp-currency').selectedIndex].getAttribute('data-sym');
+  /* ============ 보관함 (localStorage) ============ */
+  function lsGet(k, fb='{}') { try { return localStorage.getItem(k) || fb; } catch(e) { return fb; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch(e) { alert('⚠️ 저장 실패: 저장 공간이 부족하거나 시크릿 모드일 수 있습니다.'); return false; } }
+  function safeParse(t, fb={}) { try { const n = String(t).replace(/^\uFEFF/, '').trim(); return n ? JSON.parse(n) : fb; } catch(e) { return fb; } }
+  function isObj(v) { return !!v && Object.prototype.toString.call(v) === '[object Object]'; }
+  function getStore() { const p = safeParse(lsGet('qb_presets'), {}); return isObj(p) ? p : {}; }
+  function buildPresetName(d) { return sanitizeName(`${d?.clientName || '임시'}_${d?.eventTitle || '견적'}_${d?.issueDate || ''}`) || '임시견적'; }
 
-            ['g1', 'g2', 'g3'].forEach(type => {
-                let html = '';
-                const isForeignGrp = (type === 'g2');
+  function getFormData() {
+    return {
+      docTitle: $('#inp-docTitle').value, clientName: $('#inp-clientName').value, eventTitle: $('#inp-eventTitle').value,
+      travelDate: $('#inp-travelDate').value, pax: $('#inp-pax').value, issueDate: $('#inp-issueDate').value,
+      hlIssue: $('#inp-hl-issue').checked, currency: $('#inp-currency').value, exRate: parseNum($('#inp-exRate').value),
+      fontSize: $('#inp-fontSize').value, group1: $('#inp-group1').value, group2: $('#inp-group2').value, group3: $('#inp-group3').value,
+      g1: getRowData('g1'), g2: getRowData('g2'), g3: getRowData('g3'),
+      showTaxNote: $('#inp-showTaxNote').checked, taxNote: $('#inp-taxNote').value, specialNote: $('#inp-specialNote').value
+    };
+  }
+  function setFormData(d) {
+    if (!d) return;
+    $('#inp-docTitle').value = d.docTitle ?? '가격 산출 내역서';
+    $('#inp-clientName').value = d.clientName ?? '';
+    $('#inp-eventTitle').value = d.eventTitle ?? '';
+    $('#inp-travelDate').value = d.travelDate ?? '';
+    $('#inp-pax').value = d.pax ?? '';
+    $('#inp-issueDate').value = d.issueDate ?? '';
+    $('#inp-hl-issue').checked = !!d.hlIssue;
+    if (d.currency) $('#inp-currency').value = d.currency;
+    $('#inp-exRate').value = d.exRate ? formatAmountInput(String(d.exRate)) : $('#inp-exRate').value;
+    if (d.fontSize) { $('#inp-fontSize').value = d.fontSize; updateFontSize(); }
+    $('#inp-group1').value = d.group1 ?? '항공료';
+    $('#inp-group2').value = d.group2 ?? '해외 현지 발생비용';
+    $('#inp-group3').value = d.group3 ?? '국내 발생비용';
+    ['g1','g2','g3'].forEach(t => $(`#${t}-container`).innerHTML = '');
+    (d.g1 || []).forEach(x => addRow('g1', x, true));
+    (d.g2 || []).forEach(x => addRow('g2', x, true));
+    (d.g3 || []).forEach(x => addRow('g3', x, true));
+    $('#inp-showTaxNote').checked = d.showTaxNote !== false;
+    $('#inp-taxNote').value = d.taxNote ?? '';
+    $('#inp-specialNote').value = d.specialNote ?? '';
+    render(); renderWarnings();
+  }
+  function updatePresetDropdown(filter='') {
+    const sel = $('#preset-select'); const store = getStore();
+    const keys = Object.keys(store).sort((a,b) => a.localeCompare(b, 'ko'));
+    sel.innerHTML = '<option value="">저장된 양식 선택...</option>'; let match = 0;
+    keys.forEach(k => { if (k.toLowerCase().includes(String(filter).toLowerCase())) { const o = document.createElement('option'); o.value = k; o.textContent = k; sel.appendChild(o); match++; } });
+    if (filter && match > 0) sel.selectedIndex = 1;
+  }
+  function savePreset() {
+    const name = sanitizeName(prompt('현재 견적을 브라우저에 저장할 이름을 입력하세요.', getAutoFileName())); if (!name) return;
+    const store = getStore(); store[name] = getFormData();
+    if (lsSet('qb_presets', JSON.stringify(store, null, 2))) { $('#preset-search').value = ''; updatePresetDropdown(); $('#preset-select').value = name; alert(`[${name}] 양식이 저장되었습니다.`); }
+  }
+  function loadPreset() { const n = $('#preset-select').value; if (!n) return; const s = getStore(); if (s[n]) setFormData(s[n]); }
+  function deletePreset() {
+    const n = $('#preset-select').value; if (!n) return;
+    if (!confirm(`[${n}] 양식을 영구 삭제하시겠습니까?`)) return;
+    const s = getStore(); delete s[n];
+    if (lsSet('qb_presets', JSON.stringify(s, null, 2))) { updatePresetDropdown(); alert('삭제되었습니다.'); }
+  }
+  function exportAll() {
+    const s = getStore(); if (!Object.keys(s).length) return alert('백업할 데이터가 없습니다. 먼저 양식을 저장해주세요.');
+    download('\uFEFF' + JSON.stringify(s, null, 2), `qb_presets_${new Date().toISOString().slice(0,10)}.json`, 'application/json;charset=utf-8');
+  }
+  function exportCurrent() {
+    const name = getAutoFileName();
+    download('\uFEFF' + JSON.stringify({ [name]: getFormData() }, null, 2), `공유용_${name}.json`, 'application/json;charset=utf-8');
+  }
+  function download(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+  function importData(e) {
+    const input = e.target; const file = input.files?.[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const raw = JSON.parse(String(ev.target.result).replace(/^\uFEFF/, ''));
+        let map;
+        const shapeKeys = ['currency','clientName','docTitle','g1','g2','g3','eventTitle'];
+        if (isObj(raw) && shapeKeys.some(k => k in raw)) map = { [buildPresetName(raw)]: raw };
+        else if (isObj(raw)) { map = {}; Object.entries(raw).forEach(([k,v]) => { if (isObj(v)) map[sanitizeName(k) || buildPresetName(v)] = v; }); }
+        else throw new Error('지원하지 않는 형식입니다.');
+        if (!Object.keys(map).length) throw new Error('복원 가능한 데이터가 없습니다.');
+        const store = getStore();
+        const overwrite = Object.keys(map).filter(k => k in store);
+        if (overwrite.length && !confirm(`동일 이름 ${overwrite.length}건이 있습니다.\n덮어쓸까요?`)) { input.value=''; return; }
+        const merged = { ...store, ...map };
+        if (!lsSet('qb_presets', JSON.stringify(merged, null, 2))) { input.value=''; return; }
+        updatePresetDropdown();
+        const last = Object.keys(map)[Object.keys(map).length - 1];
+        $('#preset-select').value = last; setFormData(merged[last]);
+        alert(`✅ 복원 완료. [${last}] 양식을 불러왔습니다.`);
+        switchTab('input'); $('#panelInput').scrollTop = 0;
+      } catch (err) { alert(`업로드 실패: ${err.message || '잘못된 파일 형식입니다.'}`); }
+      finally { input.value = ''; }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+  function clearForm() {
+    if (!confirm('입력한 내역을 모두 초기화하시겠습니까?')) return;
+    ['inp-clientName','inp-eventTitle','inp-travelDate','inp-pax','inp-specialNote'].forEach(id => $(`#${id}`).value = '');
+    ['g1','g2','g3'].forEach(t => $(`#${t}-container`).innerHTML = '');
+    addRow('g1', {}, true); addRow('g2', {}, true); addRow('g3', {}, true);
+    $('#inp-hl-issue').checked = false; $('#inp-showTaxNote').checked = true;
+    render(); renderWarnings();
+  }
 
-                costs[type].forEach((c, i) => {
-                    html += `
-                    <div class="card-box">
-                        <button class="btn-remove" onclick="removeCost('${type}', ${i})" title="삭제">✕</button>
-                        <div class="grid grid-cols-12 gap-1 mb-2 pr-4 items-center">
-                            <div class="col-span-3">
-                                <input type="text" class="input-field !p-1.5 text-[11px] font-bold text-slate-700 w-full" value="${esc(c.name)}" onchange="updateCostStr('${type}', ${i}, 'name', this.value)" placeholder="항목명">
-                            </div>
-                            <div class="col-span-4">
-                                <input type="text" class="input-field !p-1.5 text-[11px] w-full" value="${esc(c.desc)}" onchange="updateCostStr('${type}', ${i}, 'desc', this.value)" placeholder="세부내용 (같으면 병합됨)">
-                            </div>
-                            <div class="col-span-2">
-                                <input type="text" class="input-field !p-1.5 text-[11px] text-center w-full" value="${c.qty}" oninput="handleNumInput(this, '${type}', ${i}, 'qty')" placeholder="수량">
-                            </div>`;
-                    
-                    // 외화 그룹일 경우 입력창 안에 통화 기호 표시
-                    if(isForeignGrp) {
-                        html += `
-                            <div class="col-span-3 relative">
-                                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-emerald-600/70 pointer-events-none">${currencySym}</span>
-                                <input type="text" class="input-field !p-1.5 !pl-5 text-[11px] text-right font-black text-emerald-900 bg-emerald-50 border-emerald-300 w-full focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" value="${c.fgn}" oninput="handleNumInput(this, '${type}', ${i}, 'fgn')" placeholder="외화단가">
-                            </div>`;
-                    } else {
-                        html += `
-                            <div class="col-span-3">
-                                <input type="text" class="input-field !p-1.5 text-[11px] text-right font-black text-indigo-900 bg-indigo-50/50 w-full" value="${fmt(c.krw)}" oninput="handleNumInput(this, '${type}', ${i}, 'krw')" placeholder="원화단가">
-                            </div>`;
-                    }
+  /* ============ 드래그 앤 드롭 ============ */
+  function initDnD() {
+    ['#g1-container','#g2-container','#g3-container'].forEach(sel => {
+      const c = $(sel);
+      c.addEventListener('dragstart', e => { e.target.closest('.slot-card')?.classList.add('dragging'); });
+      c.addEventListener('dragend', e => { const card = e.target.closest('.slot-card'); if (card) { card.classList.remove('dragging'); render(); scheduleValidation(); } });
+      c.addEventListener('dragover', e => {
+        e.preventDefault();
+        const after = getDragAfter(c, e.clientY); const dragging = $('.dragging');
+        if (dragging) { if (after == null) c.appendChild(dragging); else c.insertBefore(dragging, after); }
+      });
+    });
+  }
+  function getDragAfter(c, y) {
+    const els = [...c.querySelectorAll('.slot-card:not(.dragging)')];
+    return els.reduce((closest, child) => {
+      const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2;
+      return (offset < 0 && offset > closest.offset) ? { offset, element: child } : closest;
+    }, { offset: -Infinity }).element;
+  }
 
-                    html += `
-                        </div>
-                        <div class="pr-4">
-                            <input type="text" class="input-field !p-1.5 text-[11px] text-slate-500 w-full" value="${esc(c.note)}" onchange="updateCostStr('${type}', ${i}, 'note', this.value)" placeholder="비고란 (충분히 길게 입력하세요)">
-                        </div>
-                    </div>`;
-                });
-                document.getElementById(`cost-${type}-list`).innerHTML = html;
-            });
-        }
+  /* ============ 탭 ============ */
+  function switchTab(tab) {
+    const input = $('#panelInput'), preview = $('#panelPreview');
+    if (tab === 'input') { input.classList.remove('panel-hidden'); preview.classList.add('panel-hidden'); $('#tabInput').classList.add('active'); $('#tabPreview').classList.remove('active'); }
+    else { render(); input.classList.add('panel-hidden'); preview.classList.remove('panel-hidden'); $('#tabInput').classList.remove('active'); $('#tabPreview').classList.add('active'); $('#panelPreview').scrollLeft = 0; window.scrollTo(0,0); }
+  }
 
-        function updateCostStr(type, i, key, val) {
-            costs[type][i][key] = val;
-            renderApp();
-        }
+  /* ============ PDF (1장 자동 맞춤) ============ */
+  function printPDF() {
+    const w = renderWarnings();
+    if (w.length) {
+      let msg = '⚠️ 확인이 필요한 항목이 있습니다.\n\n' + w.slice(0,5).map(x => `- ${x.msg}`).join('\n');
+      if (w.length > 5) msg += `\n...외 ${w.length - 5}건`;
+      msg += '\n\n이대로 PDF 출력을 진행하시겠습니까?';
+      if (!confirm(msg)) { $('#panelInput').scrollTop = 0; return; }
+    }
+    const sheet = $('#print-section'); const tableArea = $('#table-area'); const levels = Array.from({length:10}, (_,i) => 'pc-'+(i+1));
+    levels.forEach(c => sheet.classList.remove(c)); tableArea.style.marginBottom = '8px'; render();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const A4 = 1025; let chosen = null;
+      if (sheet.scrollHeight > A4) {
+        for (let i=0; i<levels.length; i++) { if (i>0) sheet.classList.remove(levels[i-1]); sheet.classList.add(levels[i]); void sheet.offsetHeight; if (sheet.scrollHeight <= A4) { chosen = levels[i]; break; } }
+        if (!chosen) chosen = levels[levels.length-1];
+        levels.forEach(c => sheet.classList.remove(c)); sheet.classList.add(chosen); void sheet.offsetHeight;
+      }
+      const remain = A4 - sheet.scrollHeight; if (remain > 0) { tableArea.style.marginBottom = (8 + remain) + 'px'; void sheet.offsetHeight; }
+      setTimeout(() => { window.print(); levels.forEach(c => sheet.classList.remove(c)); tableArea.style.marginBottom = '8px'; }, 100);
+    }));
+  }
 
-        function addCost(type) {
-            costs[type].push({ name: "", desc: "", qty: "", fgn: 0, krw: 0, note: "" });
-            renderInputs();
-            renderApp();
-        }
+  /* ============ 인터랙티브 HTML 내보내기 ============ */
+  function downloadInteractiveHTML() {
+    render();
+    if (validateRows().length && !confirm('⚠️ 확인이 필요한 항목이 있습니다.\n이대로 내보내기를 진행하시겠습니까?')) return;
+    const m = currencyMeta(); const exRate = parseNum($('#inp-exRate').value) || 1;
+    const clone = $('#print-section').cloneNode(true);
+    clone.querySelectorAll('.export-qty').forEach(el => { el.innerHTML = `<input type="text" class="c-qty" value="${el.textContent}">`; el.classList.remove('export-qty'); });
+    clone.querySelectorAll('.export-krw').forEach(el => { const ro = el.dataset.group === 'g2' ? 'readonly tabindex="-1" title="외화 자동 환산"' : ''; el.innerHTML = `<input type="text" class="c-krw" value="${el.textContent}" data-group="${el.dataset.group||''}" ${ro}>`; el.classList.remove('export-krw'); });
+    clone.querySelectorAll('.export-tot').forEach(el => { el.innerHTML = `<input type="text" class="c-tot" value="${el.textContent}" readonly tabindex="-1" title="자동 계산">`; el.classList.remove('export-tot'); });
+    clone.querySelectorAll('.export-fgn').forEach(el => { el.outerHTML = `<input type="text" class="c-fgn" value="${el.textContent}" style="width:calc(100% - 12px);background:transparent;border:1px solid transparent;font-family:inherit;font-size:inherit;font-weight:700;color:#047857;text-align:right;outline:none;">`; });
+    clone.querySelectorAll('.export-text').forEach(el => { el.classList.add('editable-text'); el.setAttribute('contenteditable','true'); el.classList.remove('export-text'); });
+    const sheetHtml = clone.outerHTML;
+    const fs = $('#inp-fontSize').value;
+    const styles = `
+      :root{--cost-fs:${fs}px}
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      body{background:#eef2f6;display:flex;flex-direction:column;align-items:center;padding:36px 16px;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+      .a4-sheet{background:#fff;width:100%;max-width:850px;padding:40px;box-shadow:0 10px 40px rgba(0,0,0,.12);border-radius:4px;margin-bottom:30px;position:relative}
+      .doc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;padding-bottom:16px;border-bottom:3px solid #0f172a}
+      .doc-header-left{width:52%}.doc-header-right{width:42%;display:flex;flex-direction:column;align-items:flex-end;min-height:110px}.doc-header-right img{height:42px;object-fit:contain}
+      .doc-title-area{text-align:right;margin-top:auto}.doc-title-area h2{font-size:26px;font-weight:900;letter-spacing:.14em;color:#0f172a}.doc-title-area p{font-size:10px;color:#64748b;font-weight:700;letter-spacing:.25em;margin-top:4px;text-transform:uppercase}
+      .info-table{width:100%;border-collapse:collapse}.info-table th,.info-table td{padding:5px 8px;font-size:12px;border:1px solid #e2e8f0}.info-table th{background:#f1f5f9;color:#334155;font-weight:700;text-align:center;width:26%}
+      .main-table{width:100%;border-collapse:collapse;table-layout:fixed;border-top:2px solid #0f172a;border-bottom:2px solid #0f172a;margin-top:14px}
+      .main-table th,.main-table td{border:1px solid #cbd5e1;padding:6px 7px;vertical-align:middle;word-break:keep-all;overflow:hidden}.main-table th{text-align:center;font-weight:700;background:#f1f5f9;color:#0f172a;font-size:calc(var(--cost-fs)*1.04)}.main-table td{font-size:var(--cost-fs);line-height:1.45}.main-table tbody tr{height:28px}
+      .text-center{text-align:center}.text-right{text-align:right}.text-left{text-align:left}.font-bold{font-weight:700}.font-black{font-weight:900}.font-semibold{font-weight:600}.bg-gray-50{background:#f8fafc}.bg-fgn{background:#f0fdfa}.fgn-sym{float:left;font-size:9px;color:#14b8a6;font-weight:700}
+      .subtotal-row td{background:#f1f5f9;font-weight:700;border-bottom:2px solid #94a3b8!important;padding:7px}.grand-row td{background:#f8fafc;font-weight:800;border-top:2px solid #0f172a!important;padding:8px}.grand-row-last td{border-bottom:none!important}.grand-amount{font-size:calc(var(--cost-fs)*1.25)}.grand-label{font-size:var(--cost-fs)}.hl-text{color:#dc2626!important;font-weight:900!important}.hl-text input{color:#dc2626!important;font-weight:900!important}
+      .footer-notes{font-size:11px;color:#475569;padding-top:14px}.footer-notes p.title{font-size:12px;font-weight:700;margin-bottom:6px;color:#1e293b}.footer-notes p.body{line-height:1.6;letter-spacing:-.02em;text-align:justify}
+      .footer-brand{text-align:center;margin-top:22px;border-top:1px solid #e2e8f0;padding-top:14px}.footer-brand p{font-size:11px;color:#64748b}.footer-brand a{display:none}
+      .c-qty,.c-krw,.c-tot,.c-fgn{width:100%;border:1px solid transparent;background:transparent;font-family:inherit;font-size:inherit;color:inherit;font-weight:inherit;outline:none}.c-qty{text-align:center}.c-krw,.c-tot,.c-fgn{text-align:right}.c-qty:not([readonly]):hover,.c-krw:not([readonly]):hover,.c-qty:not([readonly]):focus,.c-krw:not([readonly]):focus{background:#ccfbf1;border:1px solid #5eead4;border-radius:4px}input[readonly]{cursor:default}.editable-text{outline:none;border-radius:4px;transition:background .18s;cursor:text;min-height:16px}.editable-text:hover,.editable-text:focus{background:#ccfbf1;box-shadow:inset 0 0 0 1px #5eead4}
+      .top-bar{background:#0b1324;color:#fff;width:100%;max-width:850px;padding:16px 22px;border-radius:8px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 6px rgba(0,0,0,.12)}.btn-print{background:#0d9488;color:#fff;border:none;padding:10px 20px;border-radius:6px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit}
+      @media print{*,*::before,*::after{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}html,body{background:#fff!important;margin:0!important;padding:0!important;display:block!important}.no-print,.top-bar{display:none!important}.a4-sheet{box-shadow:none!important;max-width:100%!important;width:100%!important;padding:0!important;margin:0!important;border:none!important}table{table-layout:fixed!important;width:100%!important}@page{size:A4 portrait;margin:10mm}}
+    `;
+    const script = `
+      const EX=${exRate};
+      function p(v){return Number(String(v).replace(/[^0-9.-]/g,''))||0}
+      function f(v){const s=String(v).trim();if(s===''||s==='-')return s;return p(v).toLocaleString('ko-KR')}
+      document.addEventListener('input',e=>{const t=e.target;if(t.classList.contains('c-krw')||t.classList.contains('c-qty')){const tr=t.closest('tr');if(tr){const k=tr.querySelector('.c-krw'),q=tr.querySelector('.c-qty'),o=tr.querySelector('.c-tot');if(k&&q&&o)o.value=f(p(k.value)*p(q.value))}recalc()}});
+      document.addEventListener('change',e=>{const t=e.target;if(t.classList.contains('c-fgn')){const tr=t.closest('tr');if(tr){const k=tr.querySelector('.c-krw'),q=tr.querySelector('.c-qty'),o=tr.querySelector('.c-tot');if(k){k.value=f(Math.round(p(t.value)*EX));if(q&&o)o.value=f(p(k.value)*p(q.value))}}recalc();t.value=f(t.value)}else if(t.classList.contains('c-krw')||t.classList.contains('c-qty')){if(t.value)t.value=f(t.value)}});
+      function recalc(){let g=0;document.querySelectorAll('input.c-tot').forEach(el=>g+=p(el.value));}
+    `;
+    const fullHtml = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>큐비글로벌 맞춤 산출내역서</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta property="og:title" content="큐비글로벌 맞춤 산출내역서"><meta property="og:description" content="고객님을 위한 큐비글로벌 공식 가격 산출 내역서입니다."><style>${styles}</style></head><body><div class="top-bar no-print"><div><p style="font-size:16px;font-weight:800;">💡 큐비글로벌 스마트 산출내역서 (맞춤 편집용)</p><p style="font-size:13px;color:#94a3b8;margin-top:6px;font-weight:600;">적용 환율: ${exRate.toLocaleString('ko-KR')} (${m.code})</p></div><button class="btn-print" onclick="window.print()">🖨️ PDF 저장</button></div>${sheetHtml}<script>${script}<\/script></body></html>`;
+    download(fullHtml, `${getAutoFileName()}.html`, 'text/html;charset=utf-8');
+  }
 
-        function removeCost(type, i) {
-            costs[type].splice(i, 1);
-            renderInputs();
-            renderApp();
-        }
+  /* ============ 이벤트 ============ */
+  function bindEvents() {
+    document.addEventListener('input', e => {
+      if (e.target.classList.contains('amount') || e.target.classList.contains('fgn')) e.target.value = formatAmountInput(e.target.value);
+      if (e.target.id === 'preset-search') return;
+      if (e.target.id === 'inp-fontSize') { updateFontSize(); return; }
+      render(); scheduleValidation();
+    });
+    document.addEventListener('click', e => {
+      if (e.target.matches('.js-delete-row')) { e.target.closest('.slot-card')?.remove(); render(); scheduleValidation(); }
+      if (e.target.matches('.js-toggle-hl')) { const card = e.target.closest('.slot-card'); const on = card.dataset.hl === 'true'; card.dataset.hl = !on; e.target.classList.toggle('active', !on); render(); }
+      if (e.target.matches('#warning-list li')) scrollToRow(e.target.dataset.row);
+    });
+    $('#btn-add-g1').addEventListener('click', () => addRow('g1'));
+    $('#btn-add-g2').addEventListener('click', () => addRow('g2'));
+    $('#btn-add-g3').addEventListener('click', () => addRow('g3'));
+    $('#btn-clear-form').addEventListener('click', clearForm);
+    $('#btn-save-preset').addEventListener('click', savePreset);
+    $('#btn-load-preset').addEventListener('click', loadPreset);
+    $('#btn-delete-preset').addEventListener('click', deletePreset);
+    $('#btn-export').addEventListener('click', exportAll);
+    $('#btn-export-current').addEventListener('click', exportCurrent);
+    $('#btn-import').addEventListener('click', () => $('#import-file').click());
+    $('#import-file').addEventListener('change', importData);
+    $('#preset-search').addEventListener('input', e => updatePresetDropdown(e.target.value));
+    $('#preset-select').addEventListener('change', e => { if (e.target.value) loadPreset(); });
+    $('#inp-currency').addEventListener('change', handleCurrencyChange);
+    $('#inp-showTaxNote').addEventListener('change', render);
+    $('#inp-hl-issue').addEventListener('change', render);
+    $('#btn-print-pdf').addEventListener('click', printPDF);
+    $('#btn-export-html').addEventListener('click', downloadInteractiveHTML);
+    $('#tabInput').addEventListener('click', () => switchTab('input'));
+    $('#tabPreview').addEventListener('click', () => switchTab('preview'));
+  }
 
-        // 로우스팬(병합) 계산기
-        function getRowspanMulti(arr, idx, keys) {
-            let span = 1;
-            for (let j = idx + 1; j < arr.length; j++) {
-                let match = true;
-                for (let k of keys) {
-                    if (arr[j][k] !== arr[idx][k]) { match = false; break; }
-                }
-                if (match) span++; else break;
-            }
-            return span;
-        }
-
-        // 메인 렌더링 함수
-        function renderApp() {
-            // 1. 헤더 정보 바인딩
-            document.getElementById('out-cost-title').innerText = document.getElementById('inp-cost-title').value;
-            document.getElementById('out-client-name').innerText = document.getElementById('inp-client-name').value;
-            document.getElementById('out-event-title').innerText = document.getElementById('inp-event-title').value;
-            document.getElementById('out-date').innerText = document.getElementById('inp-date').value;
-            document.getElementById('out-pax').innerText = document.getElementById('inp-pax').value;
-            
-            const currencyCode = document.getElementById('inp-currency').value;
-            const currencySym = document.getElementById('inp-currency').options[document.getElementById('inp-currency').selectedIndex].getAttribute('data-sym');
-            const exRate = parseFloat(document.getElementById('inp-exrate').value) || 0;
-            const issueDate = document.getElementById('inp-issue').value;
-
-            document.getElementById('out-issue').innerText = `${issueDate} / ${currencyCode} ${exRate} 기준(송금)`;
-
-            // 2. 테이블 헤더(외화단가 컬럼) 업데이트 - 명확하고 심플한 디자인 적용
-            document.getElementById('th-fgn-price').innerHTML = `외화단가<br><span class="font-normal text-[10px] text-emerald-700 print:text-black">(${currencyCode})</span>`;
-
-            // 3. 안내문 업데이트
-            const taxText = document.getElementById('inp-tax-notice').value.trim();
-            if(taxText) {
-                document.getElementById('out-tax-notice-container').style.display = 'block';
-                document.getElementById('out-tax-notice-text').innerHTML = esc(taxText).replace(/\n/g, '<br>');
-            } else {
-                document.getElementById('out-tax-notice-container').style.display = 'none';
-            }
-
-            // 4. 비용 계산 및 테이블 생성 로직
-            let grandTotal = 0;
-            let foreignGrpSum = 0;
-            let domesticGrpSum = 0;
-
-            const grp1Name = document.getElementById('inp-group-1').value || '1그룹';
-            const grp2Name = document.getElementById('inp-group-2').value || '2그룹';
-            const grp3Name = document.getElementById('inp-group-3').value || '3그룹';
-
-            function renderGroupRows(dataArr, grpName, type, isForeign) {
-                let subHtml = '';
-                let subTotal = 0;
-                let validItems = dataArr.filter(c => c.name || c.desc);
-                
-                if(validItems.length === 0) return { html: '', sum: 0 };
-
-                validItems.forEach((c, i) => {
-                    const q = parseFloat(c.qty) || 0;
-                    if (isForeign) {
-                        c.krw = Math.round(c.fgn * exRate);
-                    }
-                    
-                    const k = parseFloat(c.krw) || 0;
-                    const rowTot = Math.round(q * k);
-                    subTotal += rowTot;
-                    
-                    subHtml += `<tr class="bg-white print:bg-transparent">`;
-                    
-                    // 구분 (병합)
-                    if (i === 0) {
-                        subHtml += `<td rowspan="${validItems.length}" class="text-center font-extrabold bg-slate-50 text-slate-800 tracking-tight align-middle break-keep print:bg-transparent print:text-black">${esc(grpName)}</td>`;
-                    }
-
-                    // 항목 (병합)
-                    if (i === 0 || c.name !== validItems[i-1].name) {
-                        subHtml += `<td rowspan="${getRowspanMulti(validItems, i, ['name'])}" class="text-center font-bold text-slate-800 align-middle break-keep print:text-black">
-                            <div contenteditable="true" class="edit-input w-full" onblur="updateCostStr('${type}', ${i}, 'name', this.innerText)" onkeydown="handleEditKeydown(event)">${esc(c.name)}</div>
-                        </td>`;
-                    }
-
-                    // 내용 (항목+내용이 같을때 병합)
-                    if (i === 0 || c.name !== validItems[i-1].name || c.desc !== validItems[i-1].desc) {
-                        subHtml += `<td rowspan="${getRowspanMulti(validItems, i, ['name', 'desc'])}" class="text-left px-3 font-medium text-slate-800 align-middle leading-snug break-keep print:text-black">
-                            <div contenteditable="true" class="edit-input w-full" onblur="updateCostStr('${type}', ${i}, 'desc', this.innerText)" onkeydown="handleEditKeydown(event)">${esc(c.desc).replace(/\n/g, '<br>')}</div>
-                        </td>`;
-                    }
-
-                    subHtml += `<td class="text-center font-bold text-slate-700 align-middle print:text-black">${fmt(q)}</td>`;
-
-                    // ==============================================================
-                    // 외화 단가 (뱃지 제거, 텍스트 색상 및 통화 기호를 이용한 심플 디자인)
-                    // ==============================================================
-                    if (isForeign) {
-                        subHtml += `<td class="text-right pr-2 align-middle bg-emerald-50/20 print:bg-transparent">
-                            <span class="inline-block text-[11px] text-emerald-600 font-bold mr-1 print:text-gray-600">${currencySym}</span>
-                            <span class="font-black text-emerald-800 text-[13px] print:text-black print:text-[var(--cost-fs)]">${fmt(c.fgn)}</span>
-                        </td>`;
-                    } else {
-                        subHtml += `<td class="text-center text-slate-300 align-middle bg-slate-50/50 print:bg-transparent print:text-black">-</td>`;
-                    }
-
-                    // ==============================================================
-                    // 원화 단가 & 총금액
-                    // ==============================================================
-                    subHtml += `
-                        <td class="text-right pr-2 font-bold text-slate-700 align-middle print:text-black">${fmt(k)}</td>
-                        <td class="text-right pr-2 font-black text-slate-900 align-middle text-[13px] print:text-black print:text-[var(--cost-fs)]">${fmtTotal(rowTot)}</td>
-                        <td class="text-center px-1 text-slate-600 tracking-tight break-keep align-middle print:text-black">
-                            <div contenteditable="true" class="edit-input w-full" onblur="updateCostStr('${type}', ${i}, 'note', this.innerText)" onkeydown="handleEditKeydown(event)">${esc(c.note)}</div>
-                        </td>
-                    </tr>`;
-                });
-
-                if(subTotal > 0) {
-                    subHtml += `<tr class="subtotal-row">
-                        <td colspan="6" class="text-center py-2 font-bold text-slate-700 print:text-black print:bg-gray-100">소계 - ${esc(grpName)}</td>
-                        <td class="text-right pr-2 font-black tracking-tight text-slate-800 print:text-black print:bg-gray-100">${fmtTotal(subTotal)}</td>
-                        <td class="bg-slate-50 border-b-2 border-slate-400 print:bg-gray-100 print:border-black"></td>
-                    </tr>`;
-                }
-                return { html: subHtml, sum: subTotal };
-            }
-
-            const res1 = renderGroupRows(costs.g1, grp1Name, 'g1', false);
-            const res2 = renderGroupRows(costs.g2, grp2Name, 'g2', true); 
-            const res3 = renderGroupRows(costs.g3, grp3Name, 'g3', false);
-
-            grandTotal = res1.sum + res2.sum + res3.sum;
-            foreignGrpSum = res2.sum;
-            domesticGrpSum = res3.sum;
-            const noFlightTotal = foreignGrpSum + domesticGrpSum;
-
-            // ========================================================
-            // WebKit 렌더링 버그 방지를 위해 tbody를 그룹별로 분할 생성
-            // ========================================================
-            let htmlFragments = '';
-            
-            if(res1.html) htmlFragments += `<tbody class="print-avoid-break">${res1.html}</tbody>`;
-            if(res2.html) htmlFragments += `<tbody class="print-avoid-break">${res2.html}</tbody>`;
-            if(res3.html) htmlFragments += `<tbody class="print-avoid-break">${res3.html}</tbody>`;
-
-            let summaryHtml = `<tbody class="print-avoid-break">`;
-            summaryHtml += `
-            <tr class="bg-blue-50 border-t-[3px] border-slate-900 print:bg-gray-200 print:border-t-2 print:border-black">
-                <td colspan="6" class="text-center py-3 font-black tracking-widest text-slate-900 print:text-black print:py-2">전 체 합 계 금 액</td>
-                <td colspan="2" class="text-right pr-4 font-black text-[16px] text-blue-800 tracking-tighter whitespace-nowrap print:text-black print:whitespace-normal print:text-[14px]">₩ ${fmtTotal(grandTotal)}</td>
-            </tr>`;
-
-            if (res1.sum > 0 && noFlightTotal > 0) {
-                summaryHtml += `
-                <tr class="bg-slate-100 border-b-2 border-slate-900 print:bg-gray-100 print:border-black">
-                    <td colspan="6" class="text-center py-2 font-bold text-slate-600 print:text-black">${esc(grp2Name)} + ${esc(grp3Name)} 비용 합계 <span class="font-normal text-[10px]">(항공 제외)</span></td>
-                    <td colspan="2" class="text-right pr-4 font-black text-[14px] text-slate-700 tracking-tight whitespace-nowrap print:text-black print:whitespace-normal print:text-[13px]">₩ ${fmtTotal(noFlightTotal)}</td>
-                </tr>`;
-            }
-            summaryHtml += `</tbody>`;
-            htmlFragments += summaryHtml;
-
-            // Table Header와 Colgroup은 유지하고 tbody 구역만 교체
-            const tableEl = document.getElementById('main-table');
-            const colgroupHtml = tableEl.querySelector('colgroup').outerHTML;
-            const theadHtml = tableEl.querySelector('thead').outerHTML;
-            
-            tableEl.innerHTML = colgroupHtml + theadHtml + htmlFragments;
-            document.getElementById('top-total').innerText = fmtTotal(grandTotal);
-        }
-
-        function clearForm() {
-            if(!confirm('입력한 내역을 모두 초기화하시겠습니까?')) return;
-            costs = { g1: [], g2: [], g3: [] };
-            document.getElementById('inp-client-name').value = '';
-            document.getElementById('inp-event-title').value = '';
-            document.getElementById('inp-date').value = '';
-            document.getElementById('inp-pax').value = '';
-            renderInputs();
-            renderApp();
-        }
-
-        // Init
-        window.onload = () => {
-            renderInputs();
-            renderApp();
-        };
-    </script>
+  document.addEventListener('DOMContentLoaded', () => {
+    updateFontSize();
+    buildInitialInputs();
+    bindEvents();
+    initDnD();
+    updatePresetDropdown();
+    render();
+    scheduleValidation();
+  });
+})();
+</script>
 </body>
 </html>
